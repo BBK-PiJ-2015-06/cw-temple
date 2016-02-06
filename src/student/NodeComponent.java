@@ -4,8 +4,8 @@ import game.NodeStatus;
 
 public interface NodeComponent {
 
-    void addChildNode();
+    void addChildNode(NodeComponent nodeComponent);
     void removeChildNode();
-    PriorityQueue<NodeStatus> getChildren();
+    PriorityQueue<NodeComponent> getChildren();
 
 }
