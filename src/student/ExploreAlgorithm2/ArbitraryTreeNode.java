@@ -10,6 +10,7 @@ public class ArbitraryTreeNode {
 
     public ArbitraryTreeNode(long nodeId) {
         this.nodeId = nodeId;
+        this.children = new ArbitraryTreeNode[0];
     }
 
     public void addChildren(PriorityQueue<NodeStatus> neighbours) {

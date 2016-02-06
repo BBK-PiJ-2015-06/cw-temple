@@ -7,17 +7,17 @@ import student.PriorityQueueImpl;
 
 import java.util.Collection;
 
-public class Algorithm2 implements ExploreAlgorithm{
+public class ExploreAlgorithm2 implements ExploreAlgorithm{
 
     private ArbitraryTreeNode tree;
     private ExplorationState state;
 
-    public Algorithm2(ExplorationState state) {
+    public ExploreAlgorithm2(ExplorationState state) {
         this.state = state;
         tree = new ArbitraryTreeNode(state.getCurrentLocation());
     }
 
-    public void exploreNeighbours() {
+    private void exploreNeighbours() {
         Collection<NodeStatus> neighbours = state.getNeighbours();
         PriorityQueueImpl<NodeStatus> orderedNeighbours = new PriorityQueueImpl<>();
         for(NodeStatus n : neighbours) {
@@ -28,9 +28,13 @@ public class Algorithm2 implements ExploreAlgorithm{
             aux = aux.getChildren()[0];
         }
         aux.addChildren(orderedNeighbours);
+        if(deadEnd()) {
+            removePath();
+        }
+        moveSprite();
     }
 
-    public void moveSprite() {
+    private void moveSprite() {
         ArbitraryTreeNode aux = tree;
         while(aux.getChildren().length != 0) {
             aux = aux.getChildren()[0];
@@ -38,7 +42,7 @@ public class Algorithm2 implements ExploreAlgorithm{
         state.moveTo(aux.getId());
     }
 
-    public boolean deadEnd() {
+    private boolean deadEnd() {
         if(state.getNeighbours().size() == 0 ) {
             return true;
         } else {
@@ -46,8 +50,18 @@ public class Algorithm2 implements ExploreAlgorithm{
         }
     }
 
+    public void removePath() {
+        ArbitraryTreeNode aux = tree;
+        while(aux.getChildren()[0].getChildren().length !=0) {
+            aux = aux.getChildren()[0];
+        }
+        aux.removeChild();
+    }
+
     @Override
     public void execute() {
-
+        while(state.getDistanceToTarget() != 0) {
+            exploreNeighbours();
+        }
     }
 }
