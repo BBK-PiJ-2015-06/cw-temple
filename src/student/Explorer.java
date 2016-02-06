@@ -36,7 +36,8 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        //TODO : Explore the cavern and find the orb
+        ExploreAlgorithm a1 = new ExploreAlgorithm1(state);
+        a1.execute();
     }
 
     /**
