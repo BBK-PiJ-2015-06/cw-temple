@@ -4,26 +4,25 @@ import game.ExplorationState;
 import game.NodeStatus;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class ExploreAlgorithm1 implements ExploreAlgorithm{
 
     private ExplorationState state;
-    private List<Long> deadEnds;
-    private List<Long> traversedNodes;
 
     public ExploreAlgorithm1(ExplorationState state) {
         this.state = state;
-        this.deadEnds = new ArrayList<>();
-        this.traversedNodes = new ArrayList<>();
     }
 
     @Override
     public void execute() {
         while(state.getDistanceToTarget() != 0) {
+            List<NodeStatus> neighbours = new ArrayList<>();
+            neighbours.addAll(state.getNeighbours());
+            int max = neighbours.size();
+            Random rn = new Random();
+            state.moveTo(neighbours.get(rn.nextInt(max)).getId());
         }
-
     }
-
 }
