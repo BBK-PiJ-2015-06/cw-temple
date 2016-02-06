@@ -2,6 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import student.ExploreAlgorithm1.ExploreAlgorithm1;
 
 public class Explorer {
 
