@@ -2,8 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import student.ExploreAlgorithm1.ExploreAlgorithm1;
-import student.ExploreAlgorithm2.ExploreAlgorithm2;
+import student.ExploreAlgorithm3.ExploreMaze;
 
 public class Explorer {
 
@@ -38,11 +37,8 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        //ExploreAlgorithm a1 = new ExploreAlgorithm1(state);
-        //a1.execute();
-
-        ExploreAlgorithm a2 = new ExploreAlgorithm2(state);
-        a2.execute();
+        ExploreMaze algorithm = new ExploreMaze(state);
+        algorithm.run();
     }
 
     /**

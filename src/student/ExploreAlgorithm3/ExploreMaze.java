@@ -12,11 +12,13 @@ public class ExploreMaze {
     private TreeNode treeRoot;
     private TreeNode treeLeaf;
     private ExplorationState state;
+    private List<Long> traversedNodes;
 
     public ExploreMaze(ExplorationState state) {
         this.state = state;
         treeRoot = null;
         treeLeaf = null;
+        traversedNodes = new ArrayList<>();
     }
 
     public void run() {
@@ -38,8 +40,10 @@ public class ExploreMaze {
         Iterator<NodeStatus> iterator = neighbours.iterator();
         while(iterator.hasNext()) {
             NodeStatus nodeStatus = iterator.next();
-            if(treeLeaf.getParent().getId() == nodeStatus.getId()) {
+            for(Long l : traversedNodes) {
+                if(l.equals(nodeStatus.getId())) {
                     iterator.remove();
+                }
             }
         }
         List<TreeNode> sortedNodes = new ArrayList<>();
@@ -61,6 +65,7 @@ public class ExploreMaze {
     private void moveSprite() {
         updateLeafPointer();
         state.moveTo(treeLeaf.getId());
+        traversedNodes.add(state.getCurrentLocation());
     }
 
     private void backTrack() {
