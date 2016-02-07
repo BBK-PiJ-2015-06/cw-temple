@@ -3,28 +3,28 @@ package student.ExploreAlgorithm2;
 import game.NodeStatus;
 import student.PriorityQueue;
 
-public class ArbitraryTreeNode {
+public class TreeNode {
 
     private long nodeId;
-    private ArbitraryTreeNode[] children;
+    private TreeNode[] children;
 
-    public ArbitraryTreeNode(long nodeId) {
+    public TreeNode(long nodeId) {
         this.nodeId = nodeId;
-        this.children = new ArbitraryTreeNode[0];
+        this.children = new TreeNode[0];
     }
 
     public void addChildren(PriorityQueue<NodeStatus> neighbours) {
         int size = neighbours.size();
-        children = new ArbitraryTreeNode[size];
+        children = new TreeNode[size];
         for(int i = size - 1; i >= 0; i--) {
             NodeStatus nodeStatus = neighbours.poll();
-            children[i] = new ArbitraryTreeNode(nodeStatus.getId());
+            children[i] = new TreeNode(nodeStatus.getId());
         }
     }
 
     public void removeChild() {
         if(children.length > 0) {
-            ArbitraryTreeNode[] temp = new ArbitraryTreeNode[children.length - 1];
+            TreeNode[] temp = new TreeNode[children.length - 1];
             for(int i = 0; i < temp.length; i++) {
                 temp[i] = children[i + 1];
             }
@@ -36,7 +36,7 @@ public class ArbitraryTreeNode {
         return nodeId;
     }
 
-    public ArbitraryTreeNode[] getChildren() {
+    public TreeNode[] getChildren() {
         return children;
     }
 }

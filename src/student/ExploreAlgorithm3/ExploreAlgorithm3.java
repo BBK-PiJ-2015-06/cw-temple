@@ -7,14 +7,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class ExploreMaze {
+public class ExploreAlgorithm3 {
 
     private TreeNode treeRoot;
     private TreeNode treeLeaf;
     private ExplorationState state;
     private List<Long> traversedNodes;
 
-    public ExploreMaze(ExplorationState state) {
+    public ExploreAlgorithm3(ExplorationState state) {
         this.state = state;
         treeRoot = null;
         treeLeaf = null;
@@ -40,8 +40,8 @@ public class ExploreMaze {
         Iterator<NodeStatus> iterator = neighbours.iterator();
         while(iterator.hasNext()) {
             NodeStatus nodeStatus = iterator.next();
-            for(Long l : traversedNodes) {
-                if(l.equals(nodeStatus.getId())) {
+            for (Long l : traversedNodes) {
+                if (l.equals(nodeStatus.getId())) {
                     iterator.remove();
                 }
             }
