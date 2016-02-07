@@ -3,19 +3,22 @@ package student.ExploreAlgorithm4;
 import game.ExplorationState;
 import game.NodeStatus;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Explore {
 
-    private TreeNode root;
-    private ExplorationState currentState;
     private TreeNode spritePosition;
+    private ExplorationState currentState;
+    private List<Long> visited;
 
     public Explore(ExplorationState state) {
         currentState = state;
-        root = new TreeNode(currentState.getCurrentLocation(), currentState.getDistanceToTarget());
-        spritePosition = root;
-        root.setParent(new TreeNode(0, 1000));
+        spritePosition = new TreeNode(currentState.getCurrentLocation(), currentState.getDistanceToTarget());
+        spritePosition.setParent(new TreeNode(0, 1000));
+        visited = new ArrayList<>();
+        visited.add(spritePosition.getId());
 
     }
 
@@ -25,7 +28,7 @@ public class Explore {
             if(totalNeighbours == 0) {
                 retraceSteps();
             }
-            moveGeorge();
+            assertCorrectPath();
         }
     }
 
@@ -41,10 +44,10 @@ public class Explore {
         return spritePosition.getChildren().size();
     }
 
-    private void moveGeorge() {
-        TreeNode destination = spritePosition.getChildren().peek();
+    private void moveGeorge(TreeNode destination) {
         currentState.moveTo(destination.getId());
         spritePosition = destination;
+        visited.add(destination.getId());
     }
 
     private void retraceSteps() {
@@ -53,5 +56,29 @@ public class Explore {
             spritePosition = spritePosition.getParent();
             spritePosition.getChildren().poll();
         }
+    }
+
+    private void assertCorrectPath() {
+        TreeNode destination = spritePosition.getChildren().peek();
+        while(isTraversed(destination)) {
+            if(spritePosition.getChildren().size() == 1) {
+                spritePosition.getChildren().poll();
+                retraceSteps();
+            } else {
+                spritePosition.getChildren().poll();
+            }
+            destination = spritePosition.getChildren().peek();
+        }
+        moveGeorge(destination);
+    }
+
+    private boolean isTraversed(TreeNode node) {
+        boolean output = false;
+        for(Long l: visited) {
+            if(node.getId() == l) {
+                output = true;
+            }
+        }
+        return output;
     }
 }
