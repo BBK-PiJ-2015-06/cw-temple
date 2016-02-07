@@ -19,7 +19,6 @@ public class Explore {
         spritePosition.setParent(new TreeNode(0, 1000));
         visited = new ArrayList<>();
         visited.add(spritePosition.getId());
-
     }
 
     public void findOrb() {
