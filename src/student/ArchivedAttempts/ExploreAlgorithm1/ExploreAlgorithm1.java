@@ -1,8 +1,8 @@
-package student.ExploreAlgorithm1;
+package student.ArchivedAttempts.ExploreAlgorithm1;
 
 import game.ExplorationState;
 import game.NodeStatus;
-import student.ExploreAlgorithm2.ExploreAlgorithm;
+import student.ArchivedAttempts.ExploreAlgorithm2.ExploreAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package student.ExploreAlgorithm2;
+package student.ArchivedAttempts.ExploreAlgorithm2;
 
 public interface ExploreAlgorithm {
 

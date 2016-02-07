@@ -1,4 +1,4 @@
-package student.ExploreAlgorithm3;
+package student.ArchivedAttempts.ExploreAlgorithm3;
 
 import java.util.ArrayList;
 import java.util.List;

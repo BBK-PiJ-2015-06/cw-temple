@@ -2,7 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import student.ExploreAlgorithm4.ExploreAlgorithm4;
+import student.ExploreAlgorithm4.Explore;
 
 public class Explorer {
 
@@ -37,8 +37,8 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        ExploreAlgorithm4 algorithm = new ExploreAlgorithm4(state);
-        algorithm.run();
+        Explore myExplorer = new Explore(state);
+        myExplorer.findOrb();
     }
 
     /**

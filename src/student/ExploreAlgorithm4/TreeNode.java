@@ -1,31 +1,30 @@
 package student.ExploreAlgorithm4;
 
-import java.util.ArrayList;
-import java.util.List;
+import student.PriorityQueue;
+import student.PriorityQueueImpl;
 
 public class TreeNode {
 
     private long id;
-    private int dist;
-    private List<TreeNode> children;
+    private int distance;
+    private PriorityQueue<TreeNode> children;
     private TreeNode parent;
 
-    public TreeNode(long id, int dist, TreeNode parent) {
+    public TreeNode(long id, int distance) {
         this.id = id;
-        this.dist = dist;
-        this.children = new ArrayList<>();
-        this.parent = parent;
+        this.distance = distance;
+        this.children = new PriorityQueueImpl<>();
     }
 
     public long getId() {
         return id;
     }
 
-    public int getDist() {
-        return dist;
+    public int getDistance() {
+        return distance;
     }
 
-    public List<TreeNode> getChildren() {
+    public PriorityQueue<TreeNode> getChildren() {
         return children;
     }
 
@@ -33,11 +32,8 @@ public class TreeNode {
         return  parent;
     }
 
-    @Override
-    public String toString() {
-        return "ID: " + id +
-                "\nDist: " + dist +
-                "\nChildren: " + children.toString();
+    public void setParent(TreeNode parent) {
+        this.parent = parent;
     }
 
 }
