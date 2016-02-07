@@ -33,5 +33,11 @@ public class TreeNode {
         return  parent;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                "\nDist: " + dist +
+                "\nNo. of Children: " + children.toString();
+    }
 
 }
