@@ -2,7 +2,7 @@ package student.ExploreAlgorithm1;
 
 import game.ExplorationState;
 import game.NodeStatus;
-import student.ExploreAlgorithm;
+import student.ExploreAlgorithm2.ExploreAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,6 @@ package student.ExploreAlgorithm4;
 
 import game.ExplorationState;
 import game.NodeStatus;
-
-import java.util.Collection;
 import java.util.TreeSet;
 
 public class ExploreAlgorithm4 {
@@ -13,9 +11,9 @@ public class ExploreAlgorithm4 {
 
     private ExplorationState currentState;
 
-    private Collection<NodeStatus> nodesVisited;
-    private Collection<NodeStatus> nodesDiscovered;
-    private Collection<NodeStatus> currentlyAccessible;
+    private TreeSet<NodeStatus> nodesVisited;
+    private TreeSet<NodeStatus> nodesDiscovered;
+    private TreeSet<NodeStatus> currentlyAccessible;
 
     public ExploreAlgorithm4(ExplorationState state) {
         currentState = state;
@@ -29,13 +27,65 @@ public class ExploreAlgorithm4 {
     public void run() {
         root = new TreeNode(currentState.getCurrentLocation(), currentState.getDistanceToTarget(), null);
         leaf = root;
-        getNeighbourInfo();
-        System.out.println(root);
+        while(currentState.getDistanceToTarget() != 0) {
+           getNeighbourInfo();
+           decideDirection();
+       }
     }
 
-    public void getNeighbourInfo() {
-        Collection<NodeStatus> neighbours = currentState.getNeighbours();
-        nodesDiscovered.addAll(neighbours);
+    private void getNeighbourInfo() {
+        updateNeighbours();
+        for(NodeStatus n : currentlyAccessible) {
+            if(!nodesVisited.contains(n)) {
+                nodesDiscovered.add(n);
+            }
+            leaf.getChildren().add(new TreeNode(n.getId(), n.getDistanceToTarget(), leaf));
+        }
     }
 
+    private void decideDirection() {
+        NodeStatus destination = nodesDiscovered.first();
+        if(currentlyAccessible.contains(destination)) {
+            moveExplorerTo(destination);
+        } else {
+            backTrack();
+            decideDirection();
+        }
+    }
+
+    private void moveExplorerTo(NodeStatus destination) {
+        currentState.moveTo(destination.getId());
+        nodesVisited.add(destination);
+        nodesDiscovered.remove(destination);
+        for(TreeNode tn : leaf.getChildren()) {
+            if(tn.getId() == destination.getId()) {
+                leaf = tn;
+            }
+        }
+        currentlyAccessible.clear();
+    }
+
+    private void backTrack() {
+        currentState.moveTo(leaf.getParent().getId());
+        leaf = leaf.getParent();
+        updateNeighbours();
+    }
+
+    private void updateNeighbours() {
+        currentlyAccessible.clear();
+        currentlyAccessible.addAll(currentState.getNeighbours());
+    }
+
+    @Override
+    public String toString() {
+        return "Root: " + "\n" + root
+                + "\n"
+                + "\nLeaf: " + "\n" + leaf
+                + "\n"
+                + "\nVisited: " + "\n" + nodesVisited
+                + "\n"
+                + "\nDiscovered: " + "\n" + nodesDiscovered
+                + "\n"
+                + "\nAccessible: " + "\n" + currentlyAccessible;
+    }
 }

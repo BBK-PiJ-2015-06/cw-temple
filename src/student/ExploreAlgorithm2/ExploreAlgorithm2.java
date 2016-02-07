@@ -2,19 +2,18 @@ package student.ExploreAlgorithm2;
 
 import game.ExplorationState;
 import game.NodeStatus;
-import student.ExploreAlgorithm;
 import student.PriorityQueueImpl;
 
 import java.util.Collection;
 
 public class ExploreAlgorithm2 implements ExploreAlgorithm{
 
-    private ArbitraryTreeNode tree;
+    private TreeNode tree;
     private ExplorationState state;
 
     public ExploreAlgorithm2(ExplorationState state) {
         this.state = state;
-        tree = new ArbitraryTreeNode(state.getCurrentLocation());
+        tree = new TreeNode(state.getCurrentLocation());
     }
 
     private void exploreNeighbours() {
@@ -23,7 +22,7 @@ public class ExploreAlgorithm2 implements ExploreAlgorithm{
         for(NodeStatus n : neighbours) {
             orderedNeighbours.add(n, n.getDistanceToTarget());
         }
-        ArbitraryTreeNode aux = tree;
+        TreeNode aux = tree;
         while(aux.getChildren().length != 0) {
             aux = aux.getChildren()[0];
         }
@@ -35,7 +34,7 @@ public class ExploreAlgorithm2 implements ExploreAlgorithm{
     }
 
     private void moveSprite() {
-        ArbitraryTreeNode aux = tree;
+        TreeNode aux = tree;
         while(aux.getChildren().length != 0) {
             aux = aux.getChildren()[0];
         }
@@ -51,7 +50,7 @@ public class ExploreAlgorithm2 implements ExploreAlgorithm{
     }
 
     public void removePath() {
-        ArbitraryTreeNode aux = tree;
+        TreeNode aux = tree;
         while(aux.getChildren()[0].getChildren().length !=0) {
             aux = aux.getChildren()[0];
         }

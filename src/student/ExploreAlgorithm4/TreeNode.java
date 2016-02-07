@@ -37,7 +37,7 @@ public class TreeNode {
     public String toString() {
         return "ID: " + id +
                 "\nDist: " + dist +
-                "\nNo. of Children: " + children.toString();
+                "\nChildren: " + children.toString();
     }
 
 }
