@@ -5,10 +5,7 @@ import game.Node;
 import student.PriorityQueue;
 import student.PriorityQueueImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Escape {
 
@@ -47,6 +44,9 @@ public class Escape {
 
 
     private PathStatus decideOptimalPath() {
+        if(prioritisedPaths.size() == 0) {
+            throw new IllegalStateException("No paths have been put in the prioritised list");
+        }
         PathStatus route = prioritisedPaths.peek();
         while(route.getTimeTaken() >= timeRemaining) {
             prioritisedPaths.poll();
