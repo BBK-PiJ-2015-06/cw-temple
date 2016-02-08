@@ -2,6 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import student.EscapeAlgorithm.Escape;
 import student.ExploreAlgorithm.Explore;
 
 public class Explorer {
@@ -65,6 +66,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        //TODO: Escape from the cavern before time runs out
+        Escape myExplorer = new Escape(state);
+        myExplorer.findExit();
     }
 }
