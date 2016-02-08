@@ -7,6 +7,7 @@ import student.PriorityQueueImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class Escape {
@@ -17,7 +18,9 @@ public class Escape {
     private Collection<Node> vertices;
     private int timeRemaining;
     private List<PathStatus> possiblePaths;
-    private PriorityQueue<PathStatus> priorityPaths;
+    private List<PathStatus> deadEndpaths;
+    private List<PathStatus> successfulPaths;
+    private PriorityQueue<PathStatus> prioritisedPaths;
 
     public Escape(EscapeState state) {
         currentState = state;
@@ -27,16 +30,53 @@ public class Escape {
         timeRemaining = currentState.getTimeRemaining();
         possiblePaths = new ArrayList<>();
         possiblePaths.add(new PathStatus(source));
+        deadEndpaths = new ArrayList<>();
+        successfulPaths = new ArrayList<>();
+        prioritisedPaths = new PriorityQueueImpl<>();
     }
 
     public void findExit() {
-        populatePaths(source, vertices);
+        populatePaths(source, source.getNeighbours());
         PathStatus pathToTake = decideOptimalPath();
         escapeMaze(pathToTake);
     }
 
-    private void populatePaths(Node src, Collection<Node> vertices) {
+    private void populatePaths(Node src, Collection<Node> neighbours) {
+        List<Node> accessibleNeighbours = new ArrayList<>();
+        for(Node n : neighbours) {
+            if(vertices.contains(n)) {
+                accessibleNeighbours.add(n);
+            }
+        }
+        if(!possiblePaths.isEmpty()) {
+            Iterator iterator = possiblePaths.iterator();
+            while(iterator.hasNext()) {
+                PathStatus p = (PathStatus)iterator.next();
+                branch(p, accessibleNeighbours);
+            }
+        }
+    }
 
+    private void branch(PathStatus existingPath, List<Node> neighbours) {
+        if(existingPath.getPath().containsAll(neighbours)) {
+            deadEndpaths.add(existingPath);
+        } else {
+            for(Node n : neighbours) {
+                if(!existingPath.getPath().contains(n)) {
+                    PathStatus updatedPath = new PathStatus(source);
+                    for(int i = 1; i < existingPath.getPath().size(); i++) {
+                        updatedPath.addNode(existingPath.getPath().get(i));
+                    }
+                    updatedPath.addNode(n);
+                    if(n.equals(destination)) {
+                        successfulPaths.add(updatedPath);
+                    } else {
+                        possiblePaths.add(updatedPath);
+                    }
+                }
+            }
+        }
+        possiblePaths.remove(existingPath);
     }
 
     private PathStatus decideOptimalPath() {
