@@ -5,11 +5,14 @@ import game.Node;
 import student.PriorityQueue;
 import student.PriorityQueueImpl;
 
+import java.util.Collection;
+
 public class Escape {
 
     private EscapeState currentState;
     private Node source;
     private Node destination;
+    private Collection<Node> vertices;
     private int timeRemaining;
     private PriorityQueue<PathStatus> possiblePaths;
 
@@ -17,22 +20,18 @@ public class Escape {
         currentState = state;
         source = currentState.getCurrentNode();
         destination = currentState.getExit();
+        vertices = currentState.getVertices();
         timeRemaining = currentState.getTimeRemaining();
         possiblePaths = new PriorityQueueImpl<>();
     }
 
     public void findExit() {
-        MazeGraph graph = buildGraph();
-        populatePaths(graph);
+        populatePaths(vertices);
         PathStatus pathToTake = decideOptimalPath();
         escapeMaze(pathToTake);
     }
 
-    private MazeGraph buildGraph() {
-        return null;
-    }
-
-    private void populatePaths(MazeGraph graph) {
+    private void populatePaths(Collection<Node> vertices) {
 
     }
 
