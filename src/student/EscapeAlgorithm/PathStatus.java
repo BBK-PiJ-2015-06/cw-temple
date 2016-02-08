@@ -28,6 +28,18 @@ public class PathStatus {
         Edge edge = currentNode.getEdge(nextNode);
         timeTaken = timeTaken + edge.length();
         goldEnRoute = goldEnRoute + nextNode.getTile().getOriginalGold();
+        pathSize++;
+    }
 
+    public List<Node> getPath() {
+        return path;
+    }
+
+    public int getTimeTaken() {
+        return timeTaken;
+    }
+
+    public int getGoldEnRoute() {
+        return goldEnRoute;
     }
 }
