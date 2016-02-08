@@ -41,6 +41,8 @@ public class Escape {
                     possiblePaths.remove(ps);
                 }
             }
+            System.out.println(possiblePaths.size());
+
         }
         generateRoutes();
         PathStatus pathToTake = decideOptimalPath();
