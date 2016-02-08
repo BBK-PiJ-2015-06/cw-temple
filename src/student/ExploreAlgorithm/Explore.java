@@ -1,4 +1,4 @@
-package student.ExploreAlgorithm4;
+package student.ExploreAlgorithm;
 
 import game.ExplorationState;
 import game.NodeStatus;

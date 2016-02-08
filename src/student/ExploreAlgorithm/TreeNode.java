@@ -1,4 +1,4 @@
-package student.ExploreAlgorithm4;
+package student.ExploreAlgorithm;
 
 import student.PriorityQueue;
 import student.PriorityQueueImpl;
