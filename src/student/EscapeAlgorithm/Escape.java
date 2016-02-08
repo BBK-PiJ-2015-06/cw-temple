@@ -41,6 +41,11 @@ public class Escape {
     }
 
     private void escapeMaze(PathStatus path) {
-        
+        if(path == null) {
+            throw new NullPointerException("Path to be traversed is null");
+        }
+        if(path.getTimeTaken() > timeRemaining) {
+            throw new IllegalStateException("Path will take too long to traverse");
+        }
     }
 }
