@@ -1,4 +1,4 @@
-package student.EscapeAlgorithm;
+package student.ArchivedAttempts.EscapeAlgorithm1;
 
 import game.Edge;
 import game.Node;
