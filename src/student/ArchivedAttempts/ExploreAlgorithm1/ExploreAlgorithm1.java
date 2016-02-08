@@ -2,13 +2,12 @@ package student.ArchivedAttempts.ExploreAlgorithm1;
 
 import game.ExplorationState;
 import game.NodeStatus;
-import student.ArchivedAttempts.ExploreAlgorithm2.ExploreAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ExploreAlgorithm1 implements ExploreAlgorithm {
+public class ExploreAlgorithm1 {
 
     private ExplorationState state;
     private List<NodeStatus> visitedNodes;
@@ -19,7 +18,6 @@ public class ExploreAlgorithm1 implements ExploreAlgorithm {
         visitedNodes = new ArrayList<>();
     }
 
-    @Override
     public void execute() {
         while(state.getDistanceToTarget() != 0) {
             List<NodeStatus> neighbours = new ArrayList<>();
