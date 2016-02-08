@@ -51,6 +51,15 @@ public class PathStatus {
         }
     }
 
+    public PathStatus copyPathStatusWith(Node n) {
+        PathStatus output = new PathStatus(this.getPath().get(0));
+        for(int i = 1; i < pathSize; i++) {
+            output.addNode(path.get(i));
+        }
+        output.addNode(n);
+        return output;
+    }
+
     @Override
     public String toString() {
         String output =  "Time Needed to Complete Path: " + timeTaken
