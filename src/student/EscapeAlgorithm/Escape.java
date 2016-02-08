@@ -42,45 +42,17 @@ public class Escape {
     }
 
     private void populatePaths(Node src, Collection<Node> neighbours) {
-        List<Node> accessibleNeighbours = new ArrayList<>();
-        for(Node n : neighbours) {
-            if(vertices.contains(n)) {
-                accessibleNeighbours.add(n);
-            }
-        }
-        if(!possiblePaths.isEmpty()) {
-            Iterator iterator = possiblePaths.iterator();
-            while(iterator.hasNext()) {
-                PathStatus p = (PathStatus)iterator.next();
-                branch(p, accessibleNeighbours);
-            }
-        }
     }
 
-    private void branch(PathStatus existingPath, List<Node> neighbours) {
-        if(existingPath.getPath().containsAll(neighbours)) {
-            deadEndpaths.add(existingPath);
-        } else {
-            for(Node n : neighbours) {
-                if(!existingPath.getPath().contains(n)) {
-                    PathStatus updatedPath = new PathStatus(source);
-                    for(int i = 1; i < existingPath.getPath().size(); i++) {
-                        updatedPath.addNode(existingPath.getPath().get(i));
-                    }
-                    updatedPath.addNode(n);
-                    if(n.equals(destination)) {
-                        successfulPaths.add(updatedPath);
-                    } else {
-                        possiblePaths.add(updatedPath);
-                    }
-                }
-            }
-        }
-        possiblePaths.remove(existingPath);
-    }
+
 
     private PathStatus decideOptimalPath() {
-        return null;
+        PathStatus route = prioritisedPaths.peek();
+        while(route.getTimeTaken() >= timeRemaining) {
+            prioritisedPaths.poll();
+            route = prioritisedPaths.peek();
+        }
+        return route;
     }
 
     private void escapeMaze(PathStatus path) {
