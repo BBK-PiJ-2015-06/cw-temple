@@ -5,7 +5,9 @@ import game.Node;
 import student.PriorityQueue;
 import student.PriorityQueueImpl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Escape {
 
@@ -14,7 +16,8 @@ public class Escape {
     private Node destination;
     private Collection<Node> vertices;
     private int timeRemaining;
-    private PriorityQueue<PathStatus> possiblePaths;
+    private List<PathStatus> possiblePaths;
+    private PriorityQueue<PathStatus> priorityPaths;
 
     public Escape(EscapeState state) {
         currentState = state;
@@ -22,7 +25,8 @@ public class Escape {
         destination = currentState.getExit();
         vertices = currentState.getVertices();
         timeRemaining = currentState.getTimeRemaining();
-        possiblePaths = new PriorityQueueImpl<>();
+        possiblePaths = new ArrayList<>();
+        possiblePaths.add(new PathStatus(source));
     }
 
     public void findExit() {
@@ -46,6 +50,7 @@ public class Escape {
         if(path.getTimeTaken() > timeRemaining) {
             throw new IllegalStateException("Path will take too long to traverse");
         }
+        path.getPath().remove(0);
         for(Node n : path.getPath()) {
             currentState.moveTo(n);
             if(currentState.getCurrentNode().getTile().getGold() > 0) {
