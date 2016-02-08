@@ -47,5 +47,11 @@ public class Escape {
         if(path.getTimeTaken() > timeRemaining) {
             throw new IllegalStateException("Path will take too long to traverse");
         }
+        for(Node n : path.getPath()) {
+            currentState.moveTo(n);
+            if(currentState.getCurrentNode().getTile().getGold() > 0) {
+                currentState.pickUpGold();
+            }
+        }
     }
 }
