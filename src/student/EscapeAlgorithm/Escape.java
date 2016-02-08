@@ -35,8 +35,7 @@ public class Escape {
 
     public void findExit() {
         while(!possiblePaths.isEmpty()) {
-            List<PathStatus> pathsUpdated = populatePaths(possiblePaths);
-            possiblePaths = pathsUpdated;
+            possiblePaths = populatePaths(possiblePaths);
         }
         PathStatus pathToTake = decideOptimalPath();
         escapeMaze(pathToTake);
@@ -54,6 +53,17 @@ public class Escape {
         List<PathStatus> output = new ArrayList<>();
         //TODO!!!!
         return output;
+    }
+
+    private List<Node> generateAccessibleNeighbours(Node node) {
+        Collection<Node> allNeighbours = node.getNeighbours();
+        List<Node> accessibleNeighbours = new ArrayList<>();
+        for(Node neighbour : allNeighbours) {
+            if(vertices.contains(neighbour)) {
+                accessibleNeighbours.add(neighbour);
+            }
+        }
+        return accessibleNeighbours;
     }
 
     private PathStatus decideOptimalPath() {
