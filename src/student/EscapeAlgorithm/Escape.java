@@ -36,7 +36,13 @@ public class Escape {
     public void findExit() {
         while(!possiblePaths.isEmpty()) {
             possiblePaths = populatePaths(possiblePaths);
+            for(PathStatus ps : successfulPaths) {
+                if(possiblePaths.contains(ps)) {
+                    possiblePaths.remove(ps);
+                }
+            }
         }
+        generateRoutes();
         PathStatus pathToTake = decideOptimalPath();
         escapeMaze(pathToTake);
     }
@@ -51,7 +57,23 @@ public class Escape {
 
     private List<PathStatus> branch(PathStatus pathStatus) {
         List<PathStatus> output = new ArrayList<>();
-        //TODO!!!!
+        List<Node> neighbours = generateAccessibleNeighbours(pathStatus.getLastNode());
+        for(Node neighbour : neighbours) {
+            if(!pathStatus.getPath().contains(neighbour)) {
+                output.add(pathStatus.copyPathStatusWith(neighbour));
+            }
+        }
+
+        if(output.isEmpty()) {
+            deadEndpaths.add(pathStatus);
+        } else {
+            for(PathStatus p : output) {
+                if(p.getLastNode().equals(destination)) {
+                    successfulPaths.add(p);
+                }
+            }
+        }
+
         return output;
     }
 
@@ -65,6 +87,8 @@ public class Escape {
         }
         return accessibleNeighbours;
     }
+
+    private void generateRoutes() {}
 
     private PathStatus decideOptimalPath() {
         if(prioritisedPaths.size() == 0) {
