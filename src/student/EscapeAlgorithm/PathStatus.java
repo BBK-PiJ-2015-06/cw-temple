@@ -43,6 +43,14 @@ public class PathStatus {
         return goldEnRoute;
     }
 
+    public Node getLastNode() {
+        if(pathSize > 0) {
+            return path.get(pathSize - 1);
+        } else {
+            throw new NullPointerException("This path is currently empty");
+        }
+    }
+
     @Override
     public String toString() {
         String output =  "Time Needed to Complete Path: " + timeTaken

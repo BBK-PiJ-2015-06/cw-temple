@@ -26,12 +26,12 @@ public class Escape {
     }
 
     public void findExit() {
-        populatePaths(vertices);
+        populatePaths(source, vertices);
         PathStatus pathToTake = decideOptimalPath();
         escapeMaze(pathToTake);
     }
 
-    private void populatePaths(Collection<Node> vertices) {
+    private void populatePaths(Node src, Collection<Node> vertices) {
 
     }
 
