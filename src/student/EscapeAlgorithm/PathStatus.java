@@ -1,5 +1,6 @@
 package student.EscapeAlgorithm;
 
+import game.Edge;
 import game.Node;
 
 import java.util.ArrayList;
@@ -16,5 +17,17 @@ public class PathStatus {
         path = new ArrayList<>();
         path.add(source);
         pathSize++;
+    }
+
+    public void addNode(Node nextNode) {
+        Node currentNode = path.get(pathSize - 1);
+        if(!currentNode.getNeighbours().contains(nextNode)) {
+            throw new IllegalArgumentException("Next node is not adjacent to current node");
+        }
+        path.add(nextNode);
+        Edge edge = currentNode.getEdge(nextNode);
+        timeTaken = timeTaken + edge.length();
+        goldEnRoute = goldEnRoute + nextNode.getTile().getOriginalGold();
+
     }
 }
