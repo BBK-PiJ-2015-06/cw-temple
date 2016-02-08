@@ -42,4 +42,15 @@ public class PathStatus {
     public int getGoldEnRoute() {
         return goldEnRoute;
     }
+
+    @Override
+    public String toString() {
+        String output =  "Time Needed to Complete Path: " + timeTaken
+                        + "\nTotal Gold en route: " + goldEnRoute
+                        + "\nPath: ";
+        for(Node n : path) {
+            output += n.getId() + " -> ";
+        }
+        return output;
+    }
 }
