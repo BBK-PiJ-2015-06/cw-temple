@@ -2,7 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import student.ArchivedAttempts.EscapeAlgorithm1.Escape;
+import student.EscapeAlgorithm.Escape;
 import student.ExploreAlgorithm.Explore;
 
 public class Explorer {
@@ -67,6 +67,6 @@ public class Explorer {
      */
     public void escape(EscapeState state) {
         Escape myExplorer = new Escape(state);
-        myExplorer.findExit();
+        myExplorer.escapeMaze();
     }
 }
