@@ -32,6 +32,7 @@ public class Escape {
     }
 
     public void escapeMaze() {
+        System.out.println("Destination: " + destination);
         Stack<DijVertex> test = getShortestPathFrom(currentState);
         print();
     }
@@ -39,10 +40,13 @@ public class Escape {
     private Stack<DijVertex> getShortestPathFrom(EscapeState state) {
         DijVertex currentVertex = graph.get(state.getCurrentNode().getId());
         label(currentVertex);
-        List<Long> neighbours = getNeighbours(currentVertex);
-        assignWorkingValues(currentVertex, neighbours);
-        currentVertex = smallestWorkingValue();
-
+        while(currentVertex.getNode().getId() != destination.getNode().getId()) {
+            List<Long> neighbours = getNeighbours(currentVertex);
+            assignWorkingValues(currentVertex, neighbours);
+            currentVertex = smallestWorkingValue();
+            label(currentVertex);
+            System.out.println(currentVertex);
+        }
         return null;
     }
 
@@ -55,7 +59,12 @@ public class Escape {
         v.setOrder(currentOrder);
         currentOrder++;
         labelledVertices.put(v.getNode().getId(), v);
-        graph.remove(v.getNode().getId());
+        if(graph.containsKey(v.getNode().getId())) {
+            graph.remove(v.getNode().getId());
+        } else {
+            workingVertices.remove(v.getNode().getId());
+        }
+
     }
 
     private List<Long> getNeighbours(DijVertex v) {
@@ -65,12 +74,18 @@ public class Escape {
             neighbours.add(e.getOther(v.getNode()).getId());
         }
         return neighbours;
-
     }
 
     private void assignWorkingValues(DijVertex v, List<Long> neighbours) {
         for(Long l : neighbours) {
-            DijVertex neighbour = graph.get(l);
+            DijVertex neighbour;
+            if(labelledVertices.containsKey(l)) {
+                neighbour = labelledVertices.get(l);
+            } else if(workingVertices.containsKey(l)) {
+                neighbour = workingVertices.get(l);
+            } else {
+                neighbour = graph.get(l);
+            }
             if(neighbour.getOrder() == -1) {
                 neighbour.setWorkingValue(v.getFinalValue() + v.getNode().getEdge(neighbour.getNode()).length());
                 workingVertices.put(l, neighbour);
@@ -83,7 +98,6 @@ public class Escape {
     private DijVertex smallestWorkingValue() {
         List<DijVertex> list = new ArrayList<>(workingVertices.values());
         list.sort((v1, v2) -> v1.getWorkingValue() - v2.getWorkingValue());
-        list.forEach(v -> System.out.println(v.getWorkingValue()));
         return list.get(0);
     }
 
