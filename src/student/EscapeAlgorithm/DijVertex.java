@@ -56,4 +56,8 @@ public class DijVertex {
     public List<DijVertex> getNeighbours() {
         return neighbours;
     }
+
+    public int getEdgeWeight(DijVertex neighbour) {
+        return this.node.getEdge(neighbour.getNode()).length();
+    }
 }
