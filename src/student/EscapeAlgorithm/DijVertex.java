@@ -26,7 +26,9 @@ public class DijVertex {
     }
 
     public void setWorkingValue(int newValue) {
-        workingValue = newValue;
+        if(workingValue == -1 || newValue < workingValue) {
+            workingValue = newValue;
+        }
     }
 
     public int getWorkingValue() {

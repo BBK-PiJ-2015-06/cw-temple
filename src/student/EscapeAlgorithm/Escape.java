@@ -10,8 +10,10 @@ public class Escape {
 
     private EscapeState currentState;
     private Map<Long, DijVertex> graph;
+    private Map<Long, DijVertex> workingVertices;
+    private Map<Long, DijVertex> labelledVertices;
     private DijVertex destination;
-    private int currentOrder = 0;
+    private int currentOrder = 1;
 
     public Escape(EscapeState state) {
         currentState = state;
@@ -21,6 +23,8 @@ public class Escape {
 
     private void buildGraph() {
         graph = new HashMap<>();
+        workingVertices = new HashMap<>();
+        labelledVertices = new HashMap<>();
         Collection<Node> nodes = currentState.getVertices();
         for(Node n : nodes) {
             graph.put(n.getId(), new DijVertex(n));
@@ -32,10 +36,12 @@ public class Escape {
         print();
     }
 
-    public Stack<DijVertex> getShortestPathFrom(EscapeState state) {
+    private Stack<DijVertex> getShortestPathFrom(EscapeState state) {
         DijVertex currentVertex = graph.get(state.getCurrentNode().getId());
         label(currentVertex);
         List<Long> neighbours = getNeighbours(currentVertex);
+        assignWorkingValues(currentVertex, neighbours);
+
         return null;
     }
 
@@ -47,6 +53,8 @@ public class Escape {
         }
         v.setOrder(currentOrder);
         currentOrder++;
+        labelledVertices.put(v.getNode().getId(), v);
+        graph.remove(v.getNode().getId());
     }
 
     private List<Long> getNeighbours(DijVertex v) {
@@ -59,7 +67,26 @@ public class Escape {
 
     }
 
+    private void assignWorkingValues(DijVertex v, List<Long> neighbours) {
+        for(Long l : neighbours) {
+            DijVertex neighbour = graph.get(l);
+            if(neighbour.getOrder() == -1) {
+                neighbour.setWorkingValue(v.getFinalValue() + v.getNode().getEdge(neighbour.getNode()).length());
+                workingVertices.put(l, neighbour);
+                graph.remove(l);
+            }
+
+        }
+    }
+
     public void print() {
+        System.out.println("Entire graph: ");
         graph.forEach((id, v) -> System.out.println(v));
+
+        System.out.println("Labeled vertices: ");
+        labelledVertices.forEach((id, v) -> System.out.println(v));
+
+        System.out.println("Working vertices: ");
+        workingVertices.forEach((id, v) -> System.out.println(v));
     }
 }
