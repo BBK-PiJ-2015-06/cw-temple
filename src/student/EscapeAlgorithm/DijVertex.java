@@ -2,21 +2,15 @@ package student.EscapeAlgorithm;
 
 import game.Node;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DijVertex {
 
     private Node node;
-    private int order;
-    private int workingValue;
-    private int finalValue;
-
-    private List<DijVertex> neighbours;
+    private int order = -1;
+    private int workingValue = -1;
+    private int finalValue = -1;
 
     public DijVertex(Node node) {
         this.node = node;
-        neighbours = new ArrayList<>();
     }
 
     public Node getNode() {
@@ -47,17 +41,12 @@ public class DijVertex {
         return finalValue;
     }
 
-    public void addNeighbours(List<Node> neighbours) {
-        for(Node n : neighbours) {
-            this.neighbours.add(new DijVertex(n));
-        }
-    }
-
-    public List<DijVertex> getNeighbours() {
-        return neighbours;
-    }
-
-    public int getEdgeWeight(DijVertex neighbour) {
-        return this.node.getEdge(neighbour.getNode()).length();
+    @Override
+    public String toString() {
+        return "Node Id: " + node.getId()
+                + "\nOrder: " + order
+                + "\nWorkingValue: " + workingValue
+                + "\nFinalValue: " + finalValue
+                + '\n';
     }
 }
