@@ -12,12 +12,14 @@ public class Escape {
     private Map<Long, DijVertex> graph;
     private Map<Long, DijVertex> workingVertices;
     private Map<Long, DijVertex> labelledVertices;
+    private DijVertex source;
     private DijVertex destination;
     private int currentOrder = 1;
 
     public Escape(EscapeState state) {
         currentState = state;
         buildGraph();
+        source = graph.get(currentState.getCurrentNode().getId());
         destination = graph.get(currentState.getExit().getId());
     }
 
@@ -32,13 +34,12 @@ public class Escape {
     }
 
     public void escapeMaze() {
-        System.out.println("Destination: " + destination);
-        Stack<DijVertex> test = getShortestPathFrom(currentState);
-        print();
+        Stack<DijVertex> route = getShortestPathFrom(currentState);
+        followPath(route);
     }
 
     private Stack<DijVertex> getShortestPathFrom(EscapeState state) {
-        DijVertex currentVertex = graph.get(state.getCurrentNode().getId());
+        DijVertex currentVertex = source;
         label(currentVertex);
         while(currentVertex.getNode().getId() != destination.getNode().getId()) {
             List<Long> neighbours = getNeighbours(currentVertex);
@@ -47,7 +48,8 @@ public class Escape {
             label(currentVertex);
             System.out.println(currentVertex);
         }
-        return null;
+        Stack<DijVertex> route = traceRoute();
+        return route;
     }
 
     private void label(DijVertex v) {
@@ -99,6 +101,38 @@ public class Escape {
         List<DijVertex> list = new ArrayList<>(workingVertices.values());
         list.sort((v1, v2) -> v1.getWorkingValue() - v2.getWorkingValue());
         return list.get(0);
+    }
+
+    private Stack<DijVertex> traceRoute() {
+        Stack<DijVertex> route = new Stack<>();
+        route.push(destination);
+        DijVertex temp = destination;
+        while(!temp.equals(source)) {
+            List<Long> neighbours = getNeighbours(temp);
+            List<DijVertex> vToStack = new ArrayList<>();
+            for(Long l : neighbours) {
+                if(labelledVertices.containsKey(l)) {
+                    DijVertex newTemp = labelledVertices.get(l);
+                    if(newTemp.getFinalValue() + temp.getNode().getEdge(newTemp.getNode()).length() == temp.getFinalValue()) {
+                        vToStack.add(newTemp);
+                    }
+                }
+            }
+            route.push(vToStack.get(0));
+            temp = vToStack.get(0);
+        }
+        return route;
+    }
+
+    private void followPath(Stack<DijVertex> path) {
+        path.pop();
+        while (!path.empty()) {
+            Node nextNode = path.pop().getNode();
+            currentState.moveTo(nextNode);
+            if(nextNode.getTile().getGold() > 0) {
+                currentState.pickUpGold();
+            }
+        }
     }
 
     public void print() {
