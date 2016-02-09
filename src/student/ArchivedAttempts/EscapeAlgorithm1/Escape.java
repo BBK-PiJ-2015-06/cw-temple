@@ -6,6 +6,7 @@ import student.PriorityQueue;
 import student.PriorityQueueImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Escape {
 
@@ -16,7 +17,6 @@ public class Escape {
     private int timeRemaining;
 
     private List<PathStatus> possiblePaths;
-    private List<PathStatus> deadEndpaths;
     private List<PathStatus> successfulPaths;
     private PriorityQueue<PathStatus> prioritisedPaths;
 
@@ -28,7 +28,6 @@ public class Escape {
         timeRemaining = currentState.getTimeRemaining();
         possiblePaths = new ArrayList<>();
         possiblePaths.add(new PathStatus(source));
-        deadEndpaths = new ArrayList<>();
         successfulPaths = new ArrayList<>();
         prioritisedPaths = new PriorityQueueImpl<>();
     }
@@ -36,12 +35,8 @@ public class Escape {
     public void findExit() {
         while(!possiblePaths.isEmpty()) {
             possiblePaths = populatePaths(possiblePaths);
-            for(PathStatus ps : successfulPaths) {
-                if(possiblePaths.contains(ps)) {
-                    possiblePaths.remove(ps);
-                }
-            }
-            System.out.println(possiblePaths.size());
+            System.out.println("Possible Paths: " + possiblePaths.size());
+            System.out.println("Successful Paths: " + successfulPaths.size());
 
         }
         generateRoutes();
@@ -65,18 +60,14 @@ public class Escape {
                 output.add(pathStatus.copyPathStatusWith(neighbour));
             }
         }
-
-        if(output.isEmpty()) {
-            deadEndpaths.add(pathStatus);
-        } else {
-            for(PathStatus p : output) {
-                if(p.getLastNode().equals(destination)) {
+        for(PathStatus p : output) {
+            if(p.getLastNode().equals(destination)) {
                     successfulPaths.add(p);
-                }
             }
         }
 
-        return output;
+        return output.stream().filter(p -> p.getTimeTaken() < timeRemaining
+                || !successfulPaths.contains(p)).collect(Collectors.toList());
     }
 
     private List<Node> generateAccessibleNeighbours(Node node) {
@@ -90,7 +81,11 @@ public class Escape {
         return accessibleNeighbours;
     }
 
-    private void generateRoutes() {}
+    private void generateRoutes() {
+        for(PathStatus p : successfulPaths) {
+            prioritisedPaths.add(p, 0 - p.getGoldEnRoute());
+        }
+    }
 
     private PathStatus decideOptimalPath() {
         if(prioritisedPaths.size() == 0) {
