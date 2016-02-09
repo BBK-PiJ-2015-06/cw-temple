@@ -37,7 +37,7 @@ public class ShortestPathFinder {
         }
     }
 
-    public void calculatePath() {
+    private void calculatePath() {
         DijVertex currentVertex = source;
         label(currentVertex);
         while(currentVertex.getNode().getId() != destination.getNode().getId()) {
