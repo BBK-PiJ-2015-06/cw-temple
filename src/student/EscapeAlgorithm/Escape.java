@@ -41,6 +41,7 @@ public class Escape {
         label(currentVertex);
         List<Long> neighbours = getNeighbours(currentVertex);
         assignWorkingValues(currentVertex, neighbours);
+        currentVertex = smallestWorkingValue();
 
         return null;
     }
@@ -77,6 +78,13 @@ public class Escape {
             }
 
         }
+    }
+
+    private DijVertex smallestWorkingValue() {
+        List<DijVertex> list = new ArrayList<>(workingVertices.values());
+        list.sort((v1, v2) -> v1.getWorkingValue() - v2.getWorkingValue());
+        list.forEach(v -> System.out.println(v.getWorkingValue()));
+        return list.get(0);
     }
 
     public void print() {
