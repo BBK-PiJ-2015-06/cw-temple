@@ -2,6 +2,9 @@ package student.EscapeAlgorithm;
 
 import game.Node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DijVertex {
 
     private Node node;
@@ -9,8 +12,11 @@ public class DijVertex {
     private int workingValue;
     private int finalValue;
 
+    private List<DijVertex> neighbours;
+
     public DijVertex(Node node) {
         this.node = node;
+        neighbours = new ArrayList<>();
     }
 
     public Node getNode() {
@@ -39,5 +45,15 @@ public class DijVertex {
 
     public int getFinalValue() {
         return finalValue;
+    }
+
+    public void addNeighbours(List<Node> neighbours) {
+        for(Node n : neighbours) {
+            this.neighbours.add(new DijVertex(n));
+        }
+    }
+
+    public List<DijVertex> getNeighbours() {
+        return neighbours;
     }
 }
