@@ -46,7 +46,6 @@ public class Escape {
             assignWorkingValues(currentVertex, neighbours);
             currentVertex = smallestWorkingValue();
             label(currentVertex);
-            System.out.println(currentVertex);
         }
         Stack<DijVertex> route = traceRoute();
         return route;
