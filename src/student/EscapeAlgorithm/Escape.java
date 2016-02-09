@@ -16,9 +16,6 @@ public class Escape {
     public void escapeMaze() {
         ShortestPathFinder pathFinder = new ShortestPathFinder(currentState, currentState.getCurrentNode(), currentState.getExit());
         followPath(pathFinder.getPath());
-
-        //Testing
-        System.out.println(pathFinder);
     }
 
     private void followPath(Stack<DijVertex> path) {
