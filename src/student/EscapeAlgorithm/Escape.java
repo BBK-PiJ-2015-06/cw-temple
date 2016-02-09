@@ -34,14 +34,14 @@ public class Escape {
     }
 
     public void escapeMaze() {
-        Stack<DijVertex> route = getShortestPathFrom(source);
+        Stack<DijVertex> route = getShortestPathFrom(source, destination);
         followPath(route);
     }
 
-    private Stack<DijVertex> getShortestPathFrom(DijVertex vertex) {
-        DijVertex currentVertex = vertex;
+    private Stack<DijVertex> getShortestPathFrom(DijVertex start, DijVertex finish) {
+        DijVertex currentVertex = start;
         label(currentVertex);
-        while(currentVertex.getNode().getId() != destination.getNode().getId()) {
+        while(currentVertex.getNode().getId() != finish.getNode().getId()) {
             List<Long> neighbours = getNeighbours(currentVertex);
             assignWorkingValues(currentVertex, neighbours);
             currentVertex = smallestWorkingValue();
