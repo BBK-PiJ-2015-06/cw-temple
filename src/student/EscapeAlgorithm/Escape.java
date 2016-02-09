@@ -18,12 +18,12 @@ public class Escape {
 
     public Escape(EscapeState state) {
         currentState = state;
-        buildGraph();
+        rebuildGraph();
         source = graph.get(currentState.getCurrentNode().getId());
         destination = graph.get(currentState.getExit().getId());
     }
 
-    private void buildGraph() {
+    private void rebuildGraph() {
         graph = new HashMap<>();
         workingVertices = new HashMap<>();
         labelledVertices = new HashMap<>();
