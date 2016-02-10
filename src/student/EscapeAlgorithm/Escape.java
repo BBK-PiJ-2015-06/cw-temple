@@ -5,23 +5,22 @@ import game.Node;
 import student.PriorityQueue;
 import student.PriorityQueueImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Escape {
 
     private EscapeState currentState;
     private Collection<Node> goldNodes;
-    private Collection<Node> outOfReach;
+    private Map<Long, Node> outOfReach;
     private PriorityQueue<Node> goldRank;
 
     public Escape(EscapeState state) {
         currentState = state;
         goldNodes = currentState.getVertices();
-        outOfReach = new ArrayList<>();
+        outOfReach = new HashMap<>();
         goldRank = new PriorityQueueImpl<>();
+
         if(currentState.getCurrentNode().getTile().getGold() > 0) {
             currentState.pickUpGold();
         }
@@ -56,7 +55,7 @@ public class Escape {
 
     private void updateGoldNodes() {
         goldNodes = goldNodes.stream().filter(n ->
-                n.getTile().getGold() > 0 && !outOfReach.contains(n)).collect(Collectors.toList());
+                n.getTile().getGold() > 0 && !outOfReach.containsKey(n.getId())).collect(Collectors.toList());
     }
 
     private void updateGoldRank() {
@@ -72,7 +71,7 @@ public class Escape {
             if(total < currentState.getTimeRemaining()) {
                 goldRank.add(n, distanceToGold - n.getTile().getGold());
             } else {
-                outOfReach.add(n);
+                outOfReach.put(n.getId(), n);
             }
         }
     }
