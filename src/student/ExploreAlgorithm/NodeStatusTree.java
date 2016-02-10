@@ -5,16 +5,27 @@ import student.PriorityQueue;
 
 public class NodeStatusTree {
 
-    private NodeStatus nodeStatus;
+    private long nodeId;
+    private int nodeDistance;
     private NodeStatusTree parent;
     private PriorityQueue<NodeStatusTree> children;
 
     public NodeStatusTree(NodeStatus nodeStatus) {
-        this.nodeStatus = nodeStatus;
+        nodeId = nodeStatus.getId();
+        nodeDistance = nodeStatus.getDistanceToTarget();
     }
 
-    public NodeStatus getNodeStatus() {
-        return nodeStatus;
+    public NodeStatusTree(long id, int dist) {
+        nodeId = id;
+        nodeDistance = dist;
+    }
+
+    public long getId() {
+        return nodeId;
+    }
+
+    public int getDistanceToExit() {
+        return nodeDistance;
     }
 
     public NodeStatusTree getParent() {
