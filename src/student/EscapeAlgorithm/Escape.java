@@ -18,7 +18,7 @@ public class Escape {
     private Map<Long, Node> outOfReach;
     private PriorityQueue<Node> goldRank;
 
-    private static final double DISTANCE_FACTOR = 1;
+    private static final double DISTANCE_FACTOR = 1.8;
     private static final double GOLD_FACTOR = 1;
 
     public Escape(EscapeState state) {
@@ -75,19 +75,10 @@ public class Escape {
             int total = distanceToExit + distanceToGold;
 
             if(total < currentState.getTimeRemaining()) {
-                goldRank.add(n, (distanceToGold * DISTANCE_FACTOR) - (n.getTile().getGold() * GOLD_FACTOR) - getNeighbourGold(n));
+                goldRank.add(n, (distanceToGold * DISTANCE_FACTOR) - (n.getTile().getGold() * GOLD_FACTOR));
             } else {
                 outOfReach.put(n.getId(), n);
             }
         }
-    }
-
-    private int getNeighbourGold(Node n) {
-        Collection<Node> neighbours = n.getNeighbours();
-        int total = 0;
-        for(Node nd : neighbours) {
-            total += nd.getTile().getGold();
-        }
-        return total;
     }
 }
