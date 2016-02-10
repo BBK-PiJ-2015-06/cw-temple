@@ -1,3 +1,4 @@
+/*
 package student.ArchivedAttempts.ExploreAlgorithm2;
 
 public interface ExploreAlgorithm {
@@ -5,3 +6,4 @@ public interface ExploreAlgorithm {
     void execute();
 
 }
+*/

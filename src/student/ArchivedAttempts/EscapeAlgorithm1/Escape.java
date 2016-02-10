@@ -1,3 +1,4 @@
+/*
 package student.ArchivedAttempts.EscapeAlgorithm1;
 
 import game.EscapeState;
@@ -115,3 +116,4 @@ public class Escape {
         }
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package student.ArchivedAttempts.EscapeAlgorithm1;
 
 import game.Edge;
@@ -71,3 +72,4 @@ public class PathStatus {
         return output;
     }
 }
+*/
