@@ -18,7 +18,6 @@ public class ShortestPathFinder {
 
     private int distance;
     private Stack<DijVertex> path;
-    private int totalGold = 0;
 
     public ShortestPathFinder(EscapeState state, Node start, Node end) {
         this.state = state;
@@ -125,7 +124,6 @@ public class ShortestPathFinder {
                 }
             }
             route.push(vToStack.get(0));
-            totalGold += vToStack.get(0).getNode().getTile().getGold();
             temp = vToStack.get(0);
         }
         return route;

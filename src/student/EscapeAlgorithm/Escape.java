@@ -18,7 +18,7 @@ public class Escape {
     private Map<Long, Node> outOfReach;
     private PriorityQueue<Node> goldRank;
 
-    private static final double DISTANCE_FACTOR = 1.8;
+    private static final double DISTANCE_FACTOR = 1.9;
     private static final double GOLD_FACTOR = 1;
 
     public Escape(EscapeState state) {
