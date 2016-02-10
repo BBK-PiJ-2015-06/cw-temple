@@ -3,22 +3,20 @@ package student.ExploreAlgorithm;
 import game.ExplorationState;
 import game.NodeStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class Explore {
 
     private TreeNode spritePosition;
     private ExplorationState currentState;
-    private List<Long> visited;
+    private Map<Long, TreeNode> visited;
 
     public Explore(ExplorationState state) {
         currentState = state;
         spritePosition = new TreeNode(currentState.getCurrentLocation(), currentState.getDistanceToTarget());
         spritePosition.setParent(new TreeNode(0, 1000));
-        visited = new ArrayList<>();
-        visited.add(spritePosition.getId());
+        visited = new HashMap<>();
+        visited.put(spritePosition.getId(), spritePosition);
     }
 
     public void findOrb() {
@@ -46,7 +44,7 @@ public class Explore {
     private void moveGeorge(TreeNode destination) {
         currentState.moveTo(destination.getId());
         spritePosition = destination;
-        visited.add(destination.getId());
+        visited.put(destination.getId(), destination);
     }
 
     private void retraceSteps() {
@@ -72,13 +70,7 @@ public class Explore {
     }
 
     private boolean isTraversed(TreeNode node) {
-        boolean output = false;
-        for(Long l: visited) {
-            if(node.getId() == l) {
-                output = true;
-            }
-        }
-        return output;
+        return visited.containsKey(node.getId());
     }
 }
 
