@@ -14,8 +14,8 @@ public class Escape {
 
     public Escape(EscapeState state) {
         currentState = state;
-        Collection<Node> vertices = currentState.getVertices();
-        goldNodes = vertices.stream().filter(n -> n.getTile().getGold() > 0).collect(Collectors.toList());
+        goldNodes = currentState.getVertices();
+        updateGoldNodes();
     }
 
     public void escapeMaze() {
@@ -32,6 +32,10 @@ public class Escape {
                 currentState.pickUpGold();
             }
         }
+    }
+
+    private void updateGoldNodes() {
+        goldNodes = goldNodes.stream().filter(n -> n.getTile().getGold() > 0).collect(Collectors.toList());
     }
 }
 
