@@ -3,7 +3,7 @@ package student;
 import game.EscapeState;
 import game.ExplorationState;
 import student.ExploreAlgorithm.Explore;
-import student.ArchivedAttempts.EscapeAlgorithm3.Escape;
+import student.EscapeAlgorithm.Escape;
 
 public class Explorer {
 

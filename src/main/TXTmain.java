@@ -34,6 +34,4 @@ public class TXTmain {
 
         if (totalScore != 0) System.out.println("Average score : " + totalScore / numTimesToRun);
     }
-
-
 }
