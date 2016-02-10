@@ -3,51 +3,82 @@ package student.ExploreAlgorithm;
 import game.ExplorationState;
 import game.NodeStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Explore {
 
+    private TreeNode spritePosition;
     private ExplorationState currentState;
-    private Map<Long, NodeStatus> visitedNodes;
-    private Map<Long, NodeStatus> notVisited;
-    private PriorityQueue<NodeStatus> nextMove;
+    private List<Long> visited;
 
     public Explore(ExplorationState state) {
         currentState = state;
-        visitedNodes = new HashMap<>();
-        notVisited = new HashMap<>();
-        visitedNodes.put(currentState.getCurrentLocation(), null);
-        for(NodeStatus ns : currentState.getNeighbours()) {
-            notVisited.put(ns.getId(), ns);
-        }
+        spritePosition = new TreeNode(currentState.getCurrentLocation(), currentState.getDistanceToTarget());
+        spritePosition.setParent(new TreeNode(0, 1000));
+        visited = new ArrayList<>();
+        visited.add(spritePosition.getId());
     }
 
     public void findOrb() {
         while(currentState.getDistanceToTarget() != 0) {
-            Stack<NodeStatus> route = getNextMove();
-            moveSprite(route);
+            int totalNeighbours = examineNeighbours();
+            if(totalNeighbours == 0) {
+                retraceSteps();
+            }
+            assertCorrectPath();
         }
     }
 
-    private Stack<NodeStatus> getNextMove() {
-
-    }
-
-    private void moveSprite(Stack<NodeStatus> route) {
-        while(!route.empty()) {
-            NodeStatus nextNode = route.pop();
-            currentState.moveTo(nextNode.getId());
-            if(!visitedNodes.containsKey(nextNode.getId())) {
-                visitedNodes.put(nextNode.getId(), nextNode);
-            }
-            for(NodeStatus ns : currentState.getNeighbours()) {
-                if(!notVisited.containsKey(ns.getId())) {
-                    notVisited.put(ns.getId(), ns);
-                }
+    private int examineNeighbours() {
+        Collection<NodeStatus> neighbours = currentState.getNeighbours();
+        for(NodeStatus n : neighbours) {
+            if(n.getId() != spritePosition.getParent().getId()) {
+                TreeNode tn = new TreeNode(n.getId(), n.getDistanceToTarget());
+                tn.setParent(spritePosition);
+                spritePosition.getChildren().add(tn, n.getDistanceToTarget());
             }
         }
+        return spritePosition.getChildren().size();
+    }
+
+    private void moveGeorge(TreeNode destination) {
+        currentState.moveTo(destination.getId());
+        spritePosition = destination;
+        visited.add(destination.getId());
+    }
+
+    private void retraceSteps() {
+        while(spritePosition.getChildren().size() == 0) {
+            currentState.moveTo(spritePosition.getParent().getId());
+            spritePosition = spritePosition.getParent();
+            spritePosition.getChildren().poll();
+        }
+    }
+
+    private void assertCorrectPath() {
+        TreeNode destination = spritePosition.getChildren().peek();
+        while(isTraversed(destination)) {
+            if(spritePosition.getChildren().size() == 1) {
+                spritePosition.getChildren().poll();
+                retraceSteps();
+            } else {
+                spritePosition.getChildren().poll();
+            }
+            destination = spritePosition.getChildren().peek();
+        }
+        moveGeorge(destination);
+    }
+
+    private boolean isTraversed(TreeNode node) {
+        boolean output = false;
+        for(Long l: visited) {
+            if(node.getId() == l) {
+                output = true;
+            }
+        }
+        return output;
     }
 }
+
