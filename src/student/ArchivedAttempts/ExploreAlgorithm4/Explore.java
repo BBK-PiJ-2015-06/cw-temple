@@ -1,4 +1,5 @@
-package student.ExploreAlgorithm;
+/*
+package student.ArchivedAttempts.ExploreAlgorithm4;
 
 import game.ExplorationState;
 import game.NodeStatus;
@@ -81,3 +82,4 @@ public class Explore {
         return output;
     }
 }
+*/
