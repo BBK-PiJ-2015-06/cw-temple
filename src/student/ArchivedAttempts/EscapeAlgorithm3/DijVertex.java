@@ -1,3 +1,4 @@
+/*
 package student.ArchivedAttempts.EscapeAlgorithm3;
 
 import game.Node;
@@ -52,3 +53,4 @@ public class DijVertex {
                 + '\n';
     }
 }
+*/

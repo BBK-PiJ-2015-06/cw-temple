@@ -1,3 +1,4 @@
+/*
 package student.ArchivedAttempts.EscapeAlgorithm3;
 
 import game.Edge;
@@ -138,3 +139,4 @@ public class ShortestPathFinder {
                 + "\n";
     }
 }
+*/
