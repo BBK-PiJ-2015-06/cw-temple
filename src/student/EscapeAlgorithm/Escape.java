@@ -3,6 +3,7 @@ package student.EscapeAlgorithm;
 import game.EscapeState;
 import game.Node;
 import student.PriorityQueue;
+import student.PriorityQueueImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,12 +21,26 @@ public class Escape {
         currentState = state;
         goldNodes = currentState.getVertices();
         outOfReach = new ArrayList<>();
+        goldRank = new PriorityQueueImpl<>();
+        if(currentState.getCurrentNode().getTile().getGold() > 0) {
+            currentState.pickUpGold();
+        }
         updateGoldNodes();
+        updateGoldRank();
     }
 
     public void escapeMaze() {
-        ShortestPathFinder pathFinder = new ShortestPathFinder(currentState, currentState.getCurrentNode(), currentState.getExit());
-        followPath(pathFinder.getPath());
+        while(currentState.getCurrentNode().getId() != currentState.getExit().getId()) {
+            if(goldRank.size() == 0) {
+                ShortestPathFinder toExit = new ShortestPathFinder(currentState, currentState.getCurrentNode(), currentState.getExit());
+                followPath(toExit.getPath());
+            } else {
+                ShortestPathFinder toGold = new ShortestPathFinder(currentState, currentState.getCurrentNode(), goldRank.poll());
+                followPath(toGold.getPath());
+                updateGoldNodes();
+                updateGoldRank();
+            }
+        }
     }
 
     private void followPath(Stack<DijVertex> path) {
@@ -45,6 +60,7 @@ public class Escape {
     }
 
     private void updateGoldRank() {
+        goldRank = new PriorityQueueImpl<>();
         for(Node n : goldNodes) {
             ShortestPathFinder toGold = new ShortestPathFinder(currentState, currentState.getCurrentNode(), n);
             ShortestPathFinder toExit = new ShortestPathFinder(currentState, n, currentState.getExit());
