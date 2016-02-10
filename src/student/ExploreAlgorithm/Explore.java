@@ -33,6 +33,21 @@ public class Explore {
     }
 
     private Stack<NodeStatus> getNextMove() {
-        
+
+    }
+
+    private void moveSprite(Stack<NodeStatus> route) {
+        while(!route.empty()) {
+            NodeStatus nextNode = route.pop();
+            currentState.moveTo(nextNode.getId());
+            if(!visitedNodes.containsKey(nextNode.getId())) {
+                visitedNodes.put(nextNode.getId(), nextNode);
+            }
+            for(NodeStatus ns : currentState.getNeighbours()) {
+                if(!notVisited.containsKey(ns.getId())) {
+                    notVisited.put(ns.getId(), ns);
+                }
+            }
+        }
     }
 }
