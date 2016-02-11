@@ -2,38 +2,17 @@ package student;
 
 import game.NodeStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class GraphNode {
+public interface GraphNode {
 
-    private NodeStatus node;
-    private boolean visited = false;
-    private List<GraphNode> neighbours;
+    NodeStatus getNode();
 
-    public GraphNode(NodeStatus node) {
-        this.node = node;
-        neighbours = new ArrayList<>();
-    }
+    boolean isVisited();
 
-    public NodeStatus getNode() {
-        return node;
-    }
+    void setVisited(boolean b);
 
-    public boolean isVisited() {
-        return visited;
-    }
+    List<GraphNode> getNeighbours();
 
-    public void setVisited(boolean b) {
-        visited = b;
-    }
-
-    public List<GraphNode> getNeighbours() {
-        return neighbours;
-    }
-
-    public void addNeighbour(GraphNode graphNode) {
-        neighbours.add(graphNode);
-    }
+    void addNeighbour(GraphNode graphNode);
 }
