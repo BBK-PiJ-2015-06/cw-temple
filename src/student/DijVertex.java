@@ -1,6 +1,6 @@
 package student;
 
-public class DijVertex <T> {
+public class DijVertex <T extends GraphNode> {
 
     private T t;
     private int order = -1;
@@ -11,7 +11,7 @@ public class DijVertex <T> {
         this.t = t;
     }
 
-    public T getNode() {
+    public T getGraphNode() {
         return t;
     }
 
