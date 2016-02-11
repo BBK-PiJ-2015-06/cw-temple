@@ -29,6 +29,7 @@ public class Explore {
     }
 
     private void moveOffEntrance() {
+        wholeGraph.put(state.getCurrentLocation(), new GraphNodeImpl());
         List<NodeStatus> neighbours = new ArrayList<>();
         neighbours.addAll(state.getNeighbours());
         NodeStatus destination = neighbours.get(0);
@@ -42,7 +43,7 @@ public class Explore {
     }
 
     private void addGraphNode(NodeStatus nodeStatus) {
-        GraphNode node = new GraphNode(nodeStatus);
+        GraphNode node = new GraphNodeImpl(nodeStatus);
         wholeGraph.put(nodeStatus.getId(), node);
     }
 
@@ -77,5 +78,18 @@ public class Explore {
         }
     }
 
-    private void moveSprite(GraphNode destination) {}
+    private void moveSprite(GraphNode destination) {
+        if(state.getNeighbours().contains(destination.getNode())) {
+            state.moveTo(destination.getNode().getId());
+        } else {
+            //TODO! method for finding shortest route to destination that is not adjacent
+        }
+        destination.setVisited(true);
+    }
+
+    private void followRoute(Stack<GraphNode> route) {
+        while(!route.empty()) {
+            state.moveTo(route.pop().getNode().getId());
+        }
+    }
 }
