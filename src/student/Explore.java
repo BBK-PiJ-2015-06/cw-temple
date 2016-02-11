@@ -12,15 +12,11 @@ public class Explore {
 
     private ExplorationState state;
     private Map<Long, GraphNode> wholeGraph;
-    private Map<Long, GraphNode> visitedGraph;
-    private Map<Long, GraphNode> notVisitedGraph;
 
 
     public Explore(ExplorationState state) {
         this.state = state;
         wholeGraph = new HashMap<>();
-        visitedGraph = new HashMap<>();
-        notVisitedGraph = new HashMap<>();
     }
 
     public void findOrb() {
@@ -31,6 +27,17 @@ public class Explore {
         List<NodeStatus> neighbours = new ArrayList<>();
         neighbours.addAll(state.getNeighbours());
         NodeStatus destination = neighbours.get(0);
+        addGraphNode(destination);
         state.moveTo(destination.getId());
+        markAsVisited(wholeGraph.get(destination.getId()));
+    }
+
+    private void markAsVisited(GraphNode graphNode) {
+        graphNode.setVisited(true);
+    }
+
+    private void addGraphNode(NodeStatus nodeStatus) {
+        GraphNode node = new GraphNode(nodeStatus);
+        wholeGraph.put(nodeStatus.getId(), node);
     }
 }
