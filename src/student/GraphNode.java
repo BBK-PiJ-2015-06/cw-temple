@@ -3,6 +3,7 @@ package student;
 import game.NodeStatus;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class GraphNode {
@@ -32,7 +33,7 @@ public class GraphNode {
         return neighbours;
     }
 
-    public void setNeighbours(List<GraphNode> neighbours) {
-        this.neighbours = neighbours;
+    public void addNeighbour(GraphNode graphNode) {
+        neighbours.add(graphNode);
     }
 }
