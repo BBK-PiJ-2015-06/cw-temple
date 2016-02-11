@@ -29,7 +29,7 @@ public class Explore {
     }
 
     private void moveOffEntrance() {
-        wholeGraph.put(state.getCurrentLocation(), new GraphNodeImpl());
+        wholeGraph.put(state.getCurrentLocation(), new ExploreNode());
         List<NodeStatus> neighbours = new ArrayList<>();
         neighbours.addAll(state.getNeighbours());
         NodeStatus destination = neighbours.get(0);
@@ -43,7 +43,7 @@ public class Explore {
     }
 
     private void addGraphNode(NodeStatus nodeStatus) {
-        GraphNode node = new GraphNodeImpl(nodeStatus);
+        GraphNode node = new ExploreNode(nodeStatus);
         wholeGraph.put(nodeStatus.getId(), node);
     }
 
