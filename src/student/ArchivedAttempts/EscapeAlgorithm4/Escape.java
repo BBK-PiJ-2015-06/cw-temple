@@ -1,4 +1,5 @@
-package student.EscapeAlgorithm;
+/*
+package student.ArchivedAttempts.EscapeAlgorithm4;
 
 import game.EscapeState;
 import game.Node;
@@ -82,3 +83,4 @@ public class Escape {
         }
     }
 }
+*/
