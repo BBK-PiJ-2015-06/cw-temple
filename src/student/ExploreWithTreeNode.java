@@ -3,9 +3,7 @@ package student;
 import game.ExplorationState;
 import game.NodeStatus;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ExploreWithTreeNode {
 
@@ -36,7 +34,35 @@ public class ExploreWithTreeNode {
             //Add neighbours to notVisited set
             notVisited.addAll(neighbours);
 
-            //Decide on next destination
+            //Order the notVisited nodes based on their distance to the orb
+            List<NodeStatus> sortedNotVisited = new ArrayList<>();
+            sortedNotVisited.addAll(notVisited);
+            sortedNotVisited.sort((n1, n2) -> n1.getDistanceToTarget() - n2.getDistanceToTarget());
+
+            //Decide on next destination (notVisited node that is closest to the orb)
+            //If there is a tie in terms of distance, destination is randomly chosen from closest nodes
+            NodeStatus destination;
+            if(sortedNotVisited.size() > 1) {
+                List<NodeStatus> equiDistant = new ArrayList<>();
+                for(NodeStatus nodeStatus : sortedNotVisited) {
+                    if(nodeStatus.getDistanceToTarget() == sortedNotVisited.get(0).getDistanceToTarget()) {
+                        equiDistant.add(nodeStatus);
+                    }
+                }
+                Random randomGenerator = new Random();
+                destination = equiDistant.get(randomGenerator.nextInt(equiDistant.size()));
+            } else {
+                destination = sortedNotVisited.get(0);
+            }
+
+            //Move sprite to next destination
+            
+
+            //Update pointer
+
+
+            //Update notVisited set
+            notVisited.remove(destination);
         }
     }
 }
