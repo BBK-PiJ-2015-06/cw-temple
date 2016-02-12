@@ -9,34 +9,24 @@ public class Explore {
 
     private ExplorationState state;
     private Set<Long> visited;
-    private Set<Long> notVisited;
     private Stack<NodeStatus> currentPath;
 
     public Explore(ExplorationState state) {
         this.state = state;
         visited = new HashSet<>();
-        notVisited = new HashSet<>();
         currentPath = new Stack<>();
     }
 
     public void findOrb() {
         while(state.getDistanceToTarget() != 0) {
-            //Add current location to visited list
+            //Add current location to visited set
             visited.add(state.getCurrentLocation());
-
-            //Remove current location from notVisited list
-            if(notVisited.contains(state.getCurrentLocation())) {
-                notVisited.remove(state.getCurrentLocation());
-            }
 
             //Finds all neighbours associated with current location
             Collection<NodeStatus> neighbours = state.getNeighbours();
 
             //Removes those neighbours that have already been traversed
             neighbours.removeIf(n -> visited.contains(n.getId()));
-
-            //Adds non Visited Neighbours to nonVisited list
-            neighbours.forEach(n -> notVisited.add(n.getId()));
 
             //Ranks neighbours based upon their distance to orb
             List<NodeStatus> rankedNeighbours = new ArrayList<>();
