@@ -4,9 +4,9 @@ import game.NodeStatus;
 
 import java.util.List;
 
-public interface GraphNode {
+public interface GraphNode <T extends NodeStatus, Node> {
 
-    NodeStatus getNode();
+    T getNode();
 
     boolean isVisited();
 

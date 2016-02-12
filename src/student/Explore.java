@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 public class Explore {
 
     private ExplorationState state;
-    private Map<Long, GraphNode> wholeGraph;
+    private Map<Long, GraphNode> graph;
     private Random randomGenerator;
 
 
     public Explore(ExplorationState state) {
         this.state = state;
-        wholeGraph = new HashMap<>();
+        graph = new HashMap<>();
         randomGenerator = new Random();
     }
 
@@ -29,13 +29,13 @@ public class Explore {
     }
 
     private void moveOffEntrance() {
-        wholeGraph.put(state.getCurrentLocation(), new ExploreNode());
+        graph.put(state.getCurrentLocation(), new ExploreNode());
         List<NodeStatus> neighbours = new ArrayList<>();
         neighbours.addAll(state.getNeighbours());
         NodeStatus destination = neighbours.get(0);
         addGraphNode(destination);
         state.moveTo(destination.getId());
-        markAsVisited(wholeGraph.get(destination.getId()));
+        markAsVisited(graph.get(destination.getId()));
     }
 
     private void markAsVisited(GraphNode graphNode) {
@@ -44,23 +44,23 @@ public class Explore {
 
     private void addGraphNode(NodeStatus nodeStatus) {
         GraphNode node = new ExploreNode(nodeStatus);
-        wholeGraph.put(nodeStatus.getId(), node);
+        graph.put(nodeStatus.getId(), node);
     }
 
     private void addNeighbours() {
         Collection<NodeStatus> neighbours = state.getNeighbours();
-        GraphNode currentNode = wholeGraph.get(state.getCurrentLocation());
+        GraphNode currentNode = graph.get(state.getCurrentLocation());
         for(NodeStatus ns : neighbours) {
-            if(!wholeGraph.containsKey(ns.getId())) {
+            if(!graph.containsKey(ns.getId())) {
                 addGraphNode(ns);
             }
-            currentNode.addNeighbour(wholeGraph.get(ns.getId()));
+            currentNode.addNeighbour(graph.get(ns.getId()));
         }
     }
 
     private GraphNode getDestination() {
         List<GraphNode> rankedNodes = new ArrayList<>();
-        for(Map.Entry<Long, GraphNode> entry : wholeGraph.entrySet()) {
+        for(Map.Entry<Long, GraphNode> entry : graph.entrySet()) {
             if(!entry.getValue().isVisited()) {
                 rankedNodes.add(entry.getValue());
             }
