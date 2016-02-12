@@ -24,7 +24,7 @@ public class TreeNode {
         return parent;
     }
 
-    public void setParent(TreeNode parent) {
+    private void setParent(TreeNode parent) {
         this.parent = parent;
         TreeNode aux = this.parent;
         while(aux != null) {
@@ -33,7 +33,7 @@ public class TreeNode {
         }
     }
 
-    public void addDescendant(Long id) {
+    private void addDescendant(Long id) {
         descendants.add(id);
     }
 
