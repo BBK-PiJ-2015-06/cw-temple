@@ -8,12 +8,12 @@ import java.util.*;
 public class Explore {
 
     private ExplorationState state;
-    private List<Long> visited;
+    private Set<Long> visited;
     private Stack<NodeStatus> currentPath;
 
     public Explore(ExplorationState state) {
         this.state = state;
-        visited = new ArrayList<>();
+        visited = new HashSet<>();
         currentPath = new Stack<>();
     }
 
