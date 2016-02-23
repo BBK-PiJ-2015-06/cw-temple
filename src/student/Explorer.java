@@ -36,7 +36,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        ExploreWithTreeNode myExplorer = new ExploreWithTreeNode(state);
+        Explore myExplorer = new Explore(state);
         myExplorer.findOrb();
     }
 
@@ -64,6 +64,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        //TODO
+        Escape myExplorer = new Escape(state);
+        myExplorer.escapeMaze();
     }
 }
