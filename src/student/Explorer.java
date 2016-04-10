@@ -2,6 +2,15 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import game.NodeStatus;
+import student.ArchivedAttempts.Escape;
+
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 
 public class Explorer {
 
@@ -36,8 +45,30 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        Explore myExplorer = new Explore(state);
-        myExplorer.findOrb();
+        Set<Long> explored = new HashSet<>();
+        Set<NodeStatus> notExplored = new HashSet<>();
+        PriorityQueue<NodeStatus> rankedByDistance = new PriorityQueueImpl<>();
+        Collection<GraphNode> map = new HashSet<>();
+
+        while(state.getDistanceToTarget() != 0) {
+            Long currentLocation = state.getCurrentLocation();
+            Collection<NodeStatus> neighbours = state.getNeighbours();
+            map.add(new GraphNode(currentLocation, neighbours));
+
+            explored.add(currentLocation);
+            notExplored.removeIf(n -> n.getId() == currentLocation);
+
+            neighbours.stream().filter(n -> !notExplored.contains(n) && !explored.contains(n.getId()))
+                               .forEach(n -> rankedByDistance.add(n, n.getDistanceToTarget()));
+
+            neighbours.forEach(notExplored::add);
+
+            if(!neighbours.contains(rankedByDistance.peek())) {
+                Stack<Long> path = PathBuilder.getPath(currentLocation, rankedByDistance.peek().getId(), map);
+                while(!path.empty()) state.moveTo(path.pop());
+            }
+            state.moveTo(rankedByDistance.poll().getId());
+        }
     }
 
     /**
@@ -64,7 +95,18 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        Escape myExplorer = new Escape(state);
-        myExplorer.escapeMaze();
+        //Escape myExplorer = new Escape(state);
+        //myExplorer.escapeMaze();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future future = executorService.submit(new EscapeTask(state, state.getCurrentNode(), 0, 0, new ArrayList<>(), new Stack<>()));
+        try {
+            EscapeTaskResult result = (EscapeTaskResult)future.get();
+            System.out.println(result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
