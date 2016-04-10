@@ -2,17 +2,20 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import game.Node;
 import game.NodeStatus;
-import student.ArchivedAttempts.Escape;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 
 public class Explorer {
+
+    private static final int MYTHREADS = 30;
 
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
@@ -95,18 +98,35 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        //Escape myExplorer = new Escape(state);
-        //myExplorer.escapeMaze();
+        ExecutorService executorService = Executors.newFixedThreadPool(MYTHREADS);
+        Set<EscapeTaskResult> paths = new HashSet<>();
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future future = executorService.submit(new EscapeTask(state, state.getCurrentNode(), 0, 0, new ArrayList<>(), new Stack<>()));
-        try {
-            EscapeTaskResult result = (EscapeTaskResult)future.get();
-            System.out.println(result);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        for(int i = 0; i < state.getVertices().size(); i++) {
+            Future future = executorService.submit(new EscapeTask(state, state.getCurrentNode(), 0, 0, new ArrayList<>(), new Stack<>()));
+            try {
+                EscapeTaskResult result = (EscapeTaskResult)future.get();
+                paths.add(result);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
+        executorService.shutdown();
+
+        Set<EscapeTaskResult> correctPaths = paths.stream().filter(p -> p.getTimeElapsed() < state.getTimeRemaining()).collect(Collectors.toSet());
+
+        PriorityQueue<EscapeTaskResult> orderedPaths = new PriorityQueueImpl<>();
+
+        for(EscapeTaskResult etr : correctPaths) {
+            orderedPaths.add(etr, 0 - etr.getGoldCollected());
+        }
+
+        List<Node> pathToTake = orderedPaths.peek().getRoute();
+        for(int i = 1; i < pathToTake.size(); i++) {
+            state.moveTo(pathToTake.get(i));
+            if(state.getCurrentNode().getTile().getGold() > 0) {
+                state.pickUpGold();
+            }
+        }
+        state.moveTo(state.getExit());
     }
 }
