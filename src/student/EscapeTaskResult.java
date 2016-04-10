@@ -27,4 +27,11 @@ public class EscapeTaskResult {
     public List<Node> getRoute() {
         return route;
     }
+
+    @Override
+    public String toString() {
+        return "\nTotal gold: " + getGoldCollected()
+                + "\nTime: " + getTimeElapsed()
+                + "\nRoute: " + getRoute().toString() + '\n';
+    }
 }
