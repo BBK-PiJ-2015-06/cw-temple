@@ -33,8 +33,6 @@ public class EscapeTask implements Callable {
     public Object call() throws Exception {
         while(!currentNode.equals(state.getExit())) {
             route.add(currentNode);
-            goldCollected = goldCollected + currentNode.getTile().getGold();
-
             Collection<Node> neighbours = currentNode.getNeighbours();
             List<Node> newNeighbours = neighbours.stream().filter(n -> !route.contains(n)).collect(Collectors.toList());
 
@@ -43,9 +41,9 @@ public class EscapeTask implements Callable {
                 Random random = new Random();
                 int max = newNeighbours.size() - 1;
                 nextNode = newNeighbours.get(random.nextInt(max + 1));
-                timeElapsed = timeElapsed + currentNode.getEdge(newNeighbours.get(0)).length();
+                goldCollected = goldCollected + nextNode.getTile().getGold();
+                timeElapsed = timeElapsed + currentNode.getEdge(nextNode).length();
                 wayFinderRoute.push(currentNode);
-                currentNode = newNeighbours.get(0);
             } else {
                 nextNode = wayFinderRoute.pop();
                 timeElapsed = timeElapsed + currentNode.getEdge(nextNode).length();
