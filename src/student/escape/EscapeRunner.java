@@ -1,22 +1,23 @@
-package student;
+package student.escape;
 
 import game.EscapeState;
 import game.Node;
+import student.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Escape {
+public class EscapeRunner {
 
     private EscapeState currentState;
     private Collection<Node> goldNodes;
     private Map<Long, Node> outOfReach;
-    private PriorityQueue<Node> goldRank;
+    private student.PriorityQueue<Node> goldRank;
 
     private static final double GOLD_FACTOR = 1;
     private static final double DIST_FACTOR = 1.9;
 
-    public Escape(EscapeState state) {
+    public EscapeRunner(EscapeState state) {
         currentState = state;
         goldNodes = currentState.getVertices();
         outOfReach = new HashMap<>();

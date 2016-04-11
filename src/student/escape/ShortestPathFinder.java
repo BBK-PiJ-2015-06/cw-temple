@@ -1,4 +1,4 @@
-package student;
+package student.escape;
 
 import game.Edge;
 import game.EscapeState;
@@ -21,13 +21,13 @@ public class ShortestPathFinder {
 
     public ShortestPathFinder(EscapeState state, Node start, Node end) {
         this.state = state;
-        rebuildGraph();
+        buildGraph();
         source = graph.get(start.getId());
         destination = graph.get(end.getId());
         calculatePath();
     }
 
-    private void rebuildGraph() {
+    private void buildGraph() {
         graph = new HashMap<>();
         workingVertices = new HashMap<>();
         labelledVertices = new HashMap<>();
