@@ -4,8 +4,21 @@ import student.*;
 
 import java.util.*;
 
+/**
+ * A utilities class that generates the shortest path between two NodeStatus objects during
+ * the exploration phase of the game. PathBuilder uses a simplified version of Dijkstra's
+ * algorithm to compute the shortest path, using a common edge weight of 1.
+ */
 public class PathBuilder {
 
+    /**
+     * Generates the shortest path between two NodeStatus objects.
+     * @param start the ID that represents the current NodeStatus object that the sprite resides upon
+     * @param finish the ID that represents the destination NodeStatus object that the sprite needs to
+     *               reach
+     * @param map the current map that has been built during the exploration phase
+     * @return a stack of NodeStatus ID's that represents the shortest path between the start and finish
+     */
     public static Stack<Long> getPath(Long start, Long finish, Collection<GraphNode> map) {
         Map<Long, PathVertex> vertexMap = new HashMap<>();
         map.forEach(gn -> vertexMap.put(gn.getId(), new PathVertex(gn)));
