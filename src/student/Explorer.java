@@ -2,20 +2,10 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import game.Node;
-import game.NodeStatus;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-
+import student.escape.EscapeRunner;
+import student.explore.ExploreRunner;
 
 public class Explorer {
-
-    private static final int MYTHREADS = 30;
 
     /**
      * Explore the cavern, trying to find the orb in as few steps as possible.
@@ -48,34 +38,12 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        Set<Long> explored = new HashSet<>();
-        Set<NodeStatus> notExplored = new HashSet<>();
-        PriorityQueue<NodeStatus> rankedByDistance = new PriorityQueueImpl<>();
-        Collection<GraphNode> map = new HashSet<>();
-
-        while(state.getDistanceToTarget() != 0) {
-            Long currentLocation = state.getCurrentLocation();
-            Collection<NodeStatus> neighbours = state.getNeighbours();
-            map.add(new GraphNode(currentLocation, neighbours));
-
-            explored.add(currentLocation);
-            notExplored.removeIf(n -> n.getId() == currentLocation);
-
-            neighbours.stream().filter(n -> !notExplored.contains(n) && !explored.contains(n.getId()))
-                               .forEach(n -> rankedByDistance.add(n, n.getDistanceToTarget()));
-
-            neighbours.forEach(notExplored::add);
-
-            if(!neighbours.contains(rankedByDistance.peek())) {
-                Stack<Long> path = PathBuilder.getPath(currentLocation, rankedByDistance.peek().getId(), map);
-                while(!path.empty()) state.moveTo(path.pop());
-            }
-            state.moveTo(rankedByDistance.poll().getId());
-        }
+        ExploreRunner explorer = new ExploreRunner(state);
+        explorer.findOrb();
     }
 
     /**
-     * Escape from the cavern before the ceiling collapses, trying to collect as much
+     * EscapeRunner from the cavern before the ceiling collapses, trying to collect as much
      * gold as possible along the way. Your solution must ALWAYS escape before time runs
      * out, and this should be prioritized above collecting gold.
      * <p>
@@ -98,35 +66,7 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void escape(EscapeState state) {
-        ExecutorService executorService = Executors.newFixedThreadPool(MYTHREADS);
-        Set<EscapeTaskResult> paths = new HashSet<>();
-
-        for(int i = 0; i < state.getVertices().size(); i++) {
-            Future future = executorService.submit(new EscapeTask(state, state.getCurrentNode(), 0, 0, new ArrayList<>(), new Stack<>()));
-            try {
-                EscapeTaskResult result = (EscapeTaskResult)future.get();
-                paths.add(result);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        executorService.shutdown();
-
-        Set<EscapeTaskResult> correctPaths = paths.stream().filter(p -> p.getTimeElapsed() < state.getTimeRemaining()).collect(Collectors.toSet());
-
-        PriorityQueue<EscapeTaskResult> orderedPaths = new PriorityQueueImpl<>();
-
-        for(EscapeTaskResult etr : correctPaths) {
-            orderedPaths.add(etr, 0 - etr.getGoldCollected());
-        }
-
-        List<Node> pathToTake = orderedPaths.peek().getRoute();
-        for(int i = 1; i < pathToTake.size(); i++) {
-            state.moveTo(pathToTake.get(i));
-            if(state.getCurrentNode().getTile().getGold() > 0) {
-                state.pickUpGold();
-            }
-        }
-        state.moveTo(state.getExit());
+        EscapeRunner escapee = new EscapeRunner(state);
+        escapee.escapeMaze();
     }
 }
