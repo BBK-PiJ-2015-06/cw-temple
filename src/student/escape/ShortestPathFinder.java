@@ -7,7 +7,7 @@ import game.Node;
 import java.util.*;
 
 /**
- * This class uses an algorithm akin to Dijkstra's to compute the shortest
+ * This class uses an algorithm  to compute the shortest
  * path between two vertices given a map of the maze.
  */
 public class ShortestPathFinder {
@@ -53,7 +53,7 @@ public class ShortestPathFinder {
     }
 
     /**
-     * Calculated the shortest path between the start and end vertices.
+     * Calculates the shortest path between the start and end vertices.
      */
     private void calculatePath() {
         DijVertex currentVertex = source;
