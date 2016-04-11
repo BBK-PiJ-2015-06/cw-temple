@@ -6,6 +6,10 @@ import game.Node;
 
 import java.util.*;
 
+/**
+ * This class uses an algorithm akin to Dijkstra's to compute the shortest
+ * path between two vertices given a map of the maze.
+ */
 public class ShortestPathFinder {
 
     private EscapeState state;
@@ -19,6 +23,12 @@ public class ShortestPathFinder {
     private int distance;
     private Stack<DijVertex> path;
 
+    /**
+     * Builds the shortest path object
+     * @param state the current EscapeState of the sprite
+     * @param start the starting vertex
+     * @param end the destination vertex
+     */
     public ShortestPathFinder(EscapeState state, Node start, Node end) {
         this.state = state;
         buildGraph();
@@ -27,6 +37,11 @@ public class ShortestPathFinder {
         calculatePath();
     }
 
+    /**
+     * Converts the collection of Nodes returned by the escape phase of
+     * the coursework into a graph of DijVertices ready to perform the shortest
+     * path algorithm upon.
+     */
     private void buildGraph() {
         graph = new HashMap<>();
         workingVertices = new HashMap<>();
@@ -37,6 +52,9 @@ public class ShortestPathFinder {
         }
     }
 
+    /**
+     * Calculated the shortest path between the start and end vertices.
+     */
     private void calculatePath() {
         DijVertex currentVertex = source;
         label(currentVertex);
@@ -50,14 +68,26 @@ public class ShortestPathFinder {
         this.path = traceRoute();
     }
 
+    /**
+     * Returns the distance of the shortest path computed by this object.
+     * @return the distance of the shortest path
+     */
     public int getDistance() {
         return distance;
     }
 
+    /**
+     * Returns the shortest path as a stack.
+     * @return the shortest path between then start and end vertices
+     */
     public Stack<DijVertex> getPath() {
         return path;
     }
 
+    /**
+     * Labels a DijVertice's final value
+     * @param v the vertex to be labelled
+     */
     private void label(DijVertex v) {
         if(v.getWorkingValue() == -1) {
             v.setFinalValue(0);
@@ -75,6 +105,11 @@ public class ShortestPathFinder {
 
     }
 
+    /**
+     * Retrieves the neighbours of a DijVertex
+     * @param v the DijVertex
+     * @return the neighbours
+     */
     private List<Long> getNeighbours(DijVertex v) {
         Set<Edge> edges = v.getNode().getExits();
         List<Long> neighbours = new ArrayList<>();
@@ -84,6 +119,12 @@ public class ShortestPathFinder {
         return neighbours;
     }
 
+    /**
+     * Updates the workingValue fields of all neighbours of the DijVertex.
+     * @param v the DijVertex
+     * @param neighbours the neighbours the vertex whose working values are to
+     *                   be computed.
+     */
     private void assignWorkingValues(DijVertex v, List<Long> neighbours) {
         for(Long l : neighbours) {
             DijVertex neighbour;
@@ -103,12 +144,21 @@ public class ShortestPathFinder {
         }
     }
 
+    /**
+     * Sorts the working values of all vertices computed and returns the smallest of these.
+     * @return the DijVertex within the current graph with the smallest working value.
+     */
     private DijVertex smallestWorkingValue() {
         List<DijVertex> list = new ArrayList<>(workingVertices.values());
         list.sort((v1, v2) -> v1.getWorkingValue() - v2.getWorkingValue());
         return list.get(0);
     }
 
+    /**
+     * Akin to the final stage of the shortest path algorithm, this method builds the path
+     * stack from the destination to the current location.
+     * @return the route to be taken
+     */
     private Stack<DijVertex> traceRoute() {
         Stack<DijVertex> route = new Stack<>();
         route.push(destination);
