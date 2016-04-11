@@ -43,12 +43,4 @@ public class DijVertex {
         return finalValue;
     }
 
-    @Override
-    public String toString() {
-        return "Node Id: " + node.getId()
-                + "\nOrder: " + order
-                + "\nWorkingValue: " + workingValue
-                + "\nFinalValue: " + finalValue
-                + '\n';
-    }
 }
