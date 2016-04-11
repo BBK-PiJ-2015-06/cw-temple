@@ -28,22 +28,25 @@ public class ExploreRunner {
 
     public void findOrb() {
         while(currentState.getDistanceToTarget() != 0) {
+
+            //Update map with current location
             Long currentLocation = currentState.getCurrentLocation();
             Collection<NodeStatus> neighbours = currentState.getNeighbours();
             map.add(new GraphNode(currentLocation, neighbours));
 
+            //Update explored and not explored sets
             explored.add(currentLocation);
             notExplored.removeIf(n -> n.getId() == currentLocation);
-
             neighbours.stream().filter(n -> !notExplored.contains(n) && !explored.contains(n.getId()))
                     .forEach(n -> rankedByDistance.add(n, n.getDistanceToTarget()));
-
             neighbours.forEach(notExplored::add);
 
+            //Find path to unexplored tile that's nearest to orb
             if(!neighbours.contains(rankedByDistance.peek())) {
                 Stack<Long> path = PathBuilder.getPath(currentLocation, rankedByDistance.peek().getId(), map);
                 while(!path.empty()) currentState.moveTo(path.pop());
             }
+
             currentState.moveTo(rankedByDistance.poll().getId());
         }
     }
