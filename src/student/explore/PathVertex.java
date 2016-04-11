@@ -54,14 +54,4 @@ public class PathVertex {
         return neighbours;
     }
 
-    @Override
-    public String toString() {
-        String output = "ID: " + id + "\nNeighbours: ";
-        for(Long l : neighbours) {
-            output += l + " ";
-        }
-        output += "\nOrderLabel: " + orderLabel + "\nFinalLabel: " + finalLabel + "\nWorkingLabel: " + workingLabel + '\n';
-        return output;
-    }
-
 }
