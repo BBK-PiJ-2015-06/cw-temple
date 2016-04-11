@@ -130,11 +130,4 @@ public class ShortestPathFinder {
         return route;
     }
 
-    @Override
-    public String toString() {
-        return "From node: " + source.getNode().getId()
-                + "\nTo node: " + destination.getNode().getId()
-                + "\nTime to follow: " + distance
-                + "\n";
-    }
 }
