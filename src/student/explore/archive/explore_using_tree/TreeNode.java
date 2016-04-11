@@ -1,4 +1,4 @@
-package student.explore.archive.ExploreAlgorithm5;
+package student.explore.archive.explore_using_tree;
 
 import java.util.HashSet;
 import java.util.Set;

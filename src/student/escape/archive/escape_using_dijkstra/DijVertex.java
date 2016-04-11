@@ -1,5 +1,4 @@
-/*
-package student.escape.archive.EscapeAlgorithm3;
+package student.escape.archive.escape_using_dijkstra;
 
 import game.Node;
 
@@ -53,4 +52,3 @@ public class DijVertex {
                 + '\n';
     }
 }
-*/

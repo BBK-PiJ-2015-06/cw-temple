@@ -1,4 +1,4 @@
-package student.explore.archive.ExploreAlgorithm6;
+package student.explore.archive.explore_using_stack;
 
 import game.ExplorationState;
 import game.NodeStatus;

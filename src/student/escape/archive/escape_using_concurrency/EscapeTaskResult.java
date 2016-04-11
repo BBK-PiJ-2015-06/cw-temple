@@ -1,4 +1,4 @@
-package student.escape.archive.EscapeAlgorithm4;
+package student.escape.archive.escape_using_concurrency;
 
 import game.Node;
 

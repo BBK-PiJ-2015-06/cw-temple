@@ -1,5 +1,4 @@
-/*
-package student.escape.archive.EscapeAlgorithm2;
+package student.escape.archive.escape_using_dijkstra;
 
 import game.Edge;
 import game.EscapeState;
@@ -7,9 +6,9 @@ import game.Node;
 
 import java.util.*;
 
-public class Escape {
+public class ShortestPathFinder {
 
-    private EscapeState currentState;
+    private EscapeState state;
     private Map<Long, DijVertex> graph;
     private Map<Long, DijVertex> workingVertices;
     private Map<Long, DijVertex> labelledVertices;
@@ -17,39 +16,46 @@ public class Escape {
     private DijVertex destination;
     private int currentOrder = 1;
 
-    public Escape(EscapeState state) {
-        currentState = state;
+    private int distance;
+    private Stack<DijVertex> path;
+
+    public ShortestPathFinder(EscapeState state, Node start, Node end) {
+        this.state = state;
         rebuildGraph();
-        source = graph.get(currentState.getCurrentNode().getId());
-        destination = graph.get(currentState.getExit().getId());
+        source = graph.get(start.getId());
+        destination = graph.get(end.getId());
+        calculatePath();
     }
 
     private void rebuildGraph() {
         graph = new HashMap<>();
         workingVertices = new HashMap<>();
         labelledVertices = new HashMap<>();
-        Collection<Node> nodes = currentState.getVertices();
+        Collection<Node> nodes = state.getVertices();
         for(Node n : nodes) {
             graph.put(n.getId(), new DijVertex(n));
         }
     }
 
-    public void escapeMaze() {
-        Stack<DijVertex> route = getShortestPathFrom(source, destination);
-        followPath(route);
-    }
-
-    private Stack<DijVertex> getShortestPathFrom(DijVertex start, DijVertex finish) {
-        DijVertex currentVertex = start;
+    private void calculatePath() {
+        DijVertex currentVertex = source;
         label(currentVertex);
-        while(currentVertex.getNode().getId() != finish.getNode().getId()) {
+        while(currentVertex.getNode().getId() != destination.getNode().getId()) {
             List<Long> neighbours = getNeighbours(currentVertex);
             assignWorkingValues(currentVertex, neighbours);
             currentVertex = smallestWorkingValue();
             label(currentVertex);
         }
-        Stack<DijVertex> route = traceRoute();
-        return route;
+        this.distance = currentVertex.getFinalValue();
+        this.path = traceRoute();
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public Stack<DijVertex> getPath() {
+        return path;
     }
 
     private void label(DijVertex v) {
@@ -124,26 +130,11 @@ public class Escape {
         return route;
     }
 
-    private void followPath(Stack<DijVertex> path) {
-        path.pop();
-        while (!path.empty()) {
-            Node nextNode = path.pop().getNode();
-            currentState.moveTo(nextNode);
-            if(nextNode.getTile().getGold() > 0) {
-                currentState.pickUpGold();
-            }
-        }
-    }
-
-    public void print() {
-        System.out.println("Entire graph: ");
-        graph.forEach((id, v) -> System.out.println(v));
-
-        System.out.println("Labeled vertices: ");
-        labelledVertices.forEach((id, v) -> System.out.println(v));
-
-        System.out.println("Working vertices: ");
-        workingVertices.forEach((id, v) -> System.out.println(v));
+    @Override
+    public String toString() {
+        return "From node: " + source.getNode().getId()
+                + "\nTo node: " + destination.getNode().getId()
+                + "\nTime to follow: " + distance
+                + "\n";
     }
 }
-*/
