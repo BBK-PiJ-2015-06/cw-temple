@@ -7,7 +7,7 @@ import game.Node;
 import java.util.*;
 
 /**
- * This class uses an algorithm  to compute the shortest
+ * This class uses Dijkstra's algorithm  to compute the shortest
  * path between two vertices given a map of the maze.
  */
 public class ShortestPathFinder {
@@ -24,7 +24,7 @@ public class ShortestPathFinder {
     private Stack<DijVertex> path;
 
     /**
-     * Builds the shortest path object
+     * Builds the ShortestPastFinder object
      * @param state the current EscapeState of the sprite
      * @param start the starting vertex
      * @param end the destination vertex
