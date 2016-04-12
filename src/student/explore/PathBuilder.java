@@ -23,24 +23,29 @@ public class PathBuilder {
         Map<Long, PathVertex> vertexMap = new HashMap<>();
         map.forEach(gn -> vertexMap.put(gn.getId(), new PathVertex(gn)));
 
+        //Label starting vertex
         int ordering = 0;
         PathVertex current = vertexMap.get(start);
         current.setWorkingLabel(0);
 
+        //Repeat labelling process until final destination is reached
         do {
             ordering ++;
             current.setOrderLabel(ordering);
             current.setFinalLabel(current.getWorkingLabel());
 
+            //Sets the working labels (distance measure) for neighbours of current vertex
             final PathVertex finalCurrent = current;
             current.getNeighbours().stream().filter(vertexMap::containsKey)
                     .filter(l -> vertexMap.get(l).getWorkingLabel() == -1 || vertexMap.get(l).getWorkingLabel() > finalCurrent.getFinalLabel() + 1)
                     .forEach(l -> vertexMap.get(l).setWorkingLabel(finalCurrent.getFinalLabel() + 1));
 
+            //Adds neighbours to priority queue ordered by working label
             student.PriorityQueue<PathVertex> queue = new PriorityQueueImpl<>();
             vertexMap.entrySet().stream().filter(e -> e.getValue().getFinalLabel() == -1 && e.getValue().getWorkingLabel() != -1)
                     .forEach(e -> queue.add(e.getValue(), e.getValue().getWorkingLabel()));
 
+            //retrieves neighbour with lowest working label
             current = queue.poll();
         } while(!current.getNeighbours().contains(finish));
 
@@ -50,6 +55,7 @@ public class PathBuilder {
         Stack<Long> path = new Stack<>();
         path.push(current.getId());
 
+        //Work backwards through the graph while building the shortest path
         while(!current.getNeighbours().contains(start)) {
             for(Long l : current.getNeighbours()) {
                 if(vertexMap.containsKey(l)
