@@ -1,22 +1,28 @@
 package student.explore;
 
-import student.*;
+import student.PriorityQueueImpl;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 /**
  * A utilities class that generates the shortest path between two NodeStatus objects during
  * the exploration phase of the game. PathBuilder uses a simplified version of Dijkstra's
- * algorithm to compute the shortest path, using a common edge weight of 1.
+ * algorithm to compute the shortest path, using a common edge weight of 1. This class simulates
+ * the vertex version of the algorithm adding additional fields to the graph nodes that keep track
+ * of a working label, final label and ordering number.
  */
 public class PathBuilder {
 
     /**
      * Generates the shortest path between two NodeStatus objects.
-     * @param start the ID that represents the current NodeStatus object that the sprite resides upon
+     *
+     * @param start  the ID that represents the current NodeStatus object that the sprite resides upon
      * @param finish the ID that represents the destination NodeStatus object that the sprite needs to
      *               reach
-     * @param map the current map that has been built during the exploration phase
+     * @param map    the current map that has been built during the exploration phase
      * @return a stack of NodeStatus ID's that represents the shortest path between the start and finish
      */
     public static Stack<Long> getPath(Long start, Long finish, Collection<GraphNode> map) {
@@ -30,7 +36,7 @@ public class PathBuilder {
 
         //Repeat labelling process until final destination is reached
         do {
-            ordering ++;
+            ordering++;
             current.setOrderLabel(ordering);
             current.setFinalLabel(current.getWorkingLabel());
 
@@ -47,7 +53,7 @@ public class PathBuilder {
 
             //retrieves neighbour with lowest working label
             current = queue.poll();
-        } while(!current.getNeighbours().contains(finish));
+        } while (!current.getNeighbours().contains(finish));
 
         current.setOrderLabel(ordering + 1);
         current.setFinalLabel(current.getWorkingLabel());
@@ -56,9 +62,9 @@ public class PathBuilder {
         path.push(current.getId());
 
         //Work backwards through the graph while building the shortest path
-        while(!current.getNeighbours().contains(start)) {
-            for(Long l : current.getNeighbours()) {
-                if(vertexMap.containsKey(l)
+        while (!current.getNeighbours().contains(start)) {
+            for (Long l : current.getNeighbours()) {
+                if (vertexMap.containsKey(l)
                         && vertexMap.get(l).getOrderLabel() != 0
                         && current.getFinalLabel() - 1 == vertexMap.get(l).getFinalLabel()) {
                     path.push(l);

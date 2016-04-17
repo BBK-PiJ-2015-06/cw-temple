@@ -11,13 +11,14 @@ import game.Node;
  */
 public class DijVertex {
 
-    private Node node;
+    private final Node node;
     private int order = -1;
     private int workingValue = -1;
     private int finalValue = -1;
 
     /**
      * Creates a DijVertex using a Node object.
+     *
      * @param node the Node object that is to be wrapped within this DijVertex
      */
     public DijVertex(Node node) {
@@ -26,6 +27,7 @@ public class DijVertex {
 
     /**
      * Returns the Node object of this vertex
+     *
      * @return the node
      */
     public Node getNode() {
@@ -33,15 +35,8 @@ public class DijVertex {
     }
 
     /**
-     * Sets the order field of this DijVertex.
-     * @param order the integer that this order will be set to
-     */
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    /**
      * Returns the order label of this DijVertex.
+     *
      * @return the order that this object was computed by the ShortestPathFinder
      */
     public int getOrder() {
@@ -49,17 +44,17 @@ public class DijVertex {
     }
 
     /**
-     * Sets the workingValue field of this DijVertex.
-     * @param newValue the integer that this workingValue will be reset to
+     * Sets the order field of this DijVertex.
+     *
+     * @param order the integer that this order will be set to
      */
-    public void setWorkingValue(int newValue) {
-        if(workingValue == -1 || newValue < workingValue) {
-            workingValue = newValue;
-        }
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     /**
      * Returns the current working value of this DijVertex.
+     *
      * @return the value that this vertex currently has as a distance measure
      */
     public int getWorkingValue() {
@@ -67,19 +62,32 @@ public class DijVertex {
     }
 
     /**
-     * Sets the finalValue field of this DijVertex.
-     * @param finalValue the integer that this finalValue will be set to
+     * Sets the workingValue field of this DijVertex.
+     *
+     * @param newValue the integer that this workingValue will be reset to
      */
-    public void setFinalValue(int finalValue) {
-        this.finalValue = finalValue;
+    public void setWorkingValue(int newValue) {
+        if (workingValue == -1 || newValue < workingValue) {
+            workingValue = newValue;
+        }
     }
 
     /**
      * Returns the final value of this DijVertex.
+     *
      * @return the value that this vertex finally represents as a distance measure
      */
     public int getFinalValue() {
         return finalValue;
+    }
+
+    /**
+     * Sets the finalValue field of this DijVertex.
+     *
+     * @param finalValue the integer that this finalValue will be set to
+     */
+    public void setFinalValue(int finalValue) {
+        this.finalValue = finalValue;
     }
 
 }

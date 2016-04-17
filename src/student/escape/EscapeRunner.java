@@ -2,9 +2,12 @@ package student.escape;
 
 import game.EscapeState;
 import game.Node;
-import student.*;
+import student.PriorityQueueImpl;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -12,22 +15,22 @@ import java.util.stream.Collectors;
  * maze, while picking up gold that he encounters. This class makes heavy use of
  * Dijkstra's algorithm to continuously compute the shortest distance to the exit
  * so that he always makes it out of the maze before time runs out. The decision of
- * which next Node George wil attempt to reach is calculated based upon a gold and
+ * which Node George wil attempt to reach next is calculated based upon a gold and
  * distance factor (considers the shortest distance to the node and the amount of gold
  * located there and en route)
  */
 public class EscapeRunner {
 
+    private static final double GOLD_FACTOR = 1;
+    private static final double DIST_FACTOR = 3;
     private EscapeState currentState;
     private Collection<Node> goldNodes;
     private Map<Long, Node> outOfReach;
     private student.PriorityQueue<Node> goldRank;
 
-    private static final double GOLD_FACTOR = 1;
-    private static final double DIST_FACTOR = 1.9;
-
     /**
      * Constructs the EscapeRunner object, using an EscapeState.
+     *
      * @param state the current EscapeState
      */
     public EscapeRunner(EscapeState state) {
@@ -36,7 +39,7 @@ public class EscapeRunner {
         outOfReach = new HashMap<>();
         goldRank = new PriorityQueueImpl<>();
 
-        if(currentState.getCurrentNode().getTile().getGold() > 0) {
+        if (currentState.getCurrentNode().getTile().getGold() > 0) {
             currentState.pickUpGold();
         }
         updateGoldNodes();
@@ -48,8 +51,8 @@ public class EscapeRunner {
      * of the coursework.
      */
     public void escapeMaze() {
-        while(currentState.getCurrentNode().getId() != currentState.getExit().getId()) {
-            if(goldRank.size() == 0) {
+        while (currentState.getCurrentNode().getId() != currentState.getExit().getId()) {
+            if (goldRank.size() == 0) {
                 ShortestPathFinder toExit = new ShortestPathFinder(currentState, currentState.getCurrentNode(), currentState.getExit());
                 followPath(toExit.getPath());
             } else {
@@ -63,6 +66,7 @@ public class EscapeRunner {
 
     /**
      * Moves the sprite along the path specified.
+     *
      * @param path a path to be followed during the escape phase
      */
     private void followPath(Stack<DijVertex> path) {
@@ -70,7 +74,7 @@ public class EscapeRunner {
         while (!path.empty()) {
             Node nextNode = path.pop().getNode();
             currentState.moveTo(nextNode);
-            if(nextNode.getTile().getGold() > 0) {
+            if (nextNode.getTile().getGold() > 0) {
                 currentState.pickUpGold();
             }
         }
@@ -93,7 +97,7 @@ public class EscapeRunner {
      */
     private void updateGoldRank() {
         goldRank = new PriorityQueueImpl<>();
-        for(Node n : goldNodes) {
+        for (Node n : goldNodes) {
             ShortestPathFinder toGold = new ShortestPathFinder(currentState, currentState.getCurrentNode(), n);
             ShortestPathFinder toExit = new ShortestPathFinder(currentState, n, currentState.getExit());
 
@@ -101,8 +105,8 @@ public class EscapeRunner {
             int distanceToExit = toExit.getDistance();
             int total = distanceToExit + distanceToGold;
 
-            if(total < currentState.getTimeRemaining()) {
-                goldRank.add(n, (distanceToGold * DIST_FACTOR) - (n.getTile().getGold() * GOLD_FACTOR));
+            if (total < currentState.getTimeRemaining()) {
+                goldRank.add(n, distanceToGold * DIST_FACTOR - n.getTile().getGold() * GOLD_FACTOR);
             } else {
                 outOfReach.put(n.getId(), n);
             }

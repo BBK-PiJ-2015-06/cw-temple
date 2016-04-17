@@ -14,9 +14,9 @@ import java.util.Stack;
  * This class represents the algorithm used by the sprite to explore the maze. An object is
  * created for each instance of a game being played and incrementally builds a map as the
  * sprite explores the maze. This map is then used to enable the sprite to always move to the
- * tile that is closest to the orb. The algorithm uses a simplified version of Dijkstra's
- * shortest path finder to enable George to take the shortest route to the node that is closest
- * to the orb, even if it is not a neighbour of the current tile that he resides upon.
+ * tile that is closest to the orb that has not yet been visited. The algorithm uses a simplified
+ * version of Dijkstra's shortest path finder to enable the sprite to take the shortest route to the
+ * node that is closest to the orb, even if it is not a neighbour of the current tile that it resides upon.
  */
 public class ExploreRunner {
 
@@ -29,6 +29,7 @@ public class ExploreRunner {
     /**
      * Creates an ExploreRunner object using an ExplorationState object. This constructor gets
      * called from the Explorer class in package student.
+     *
      * @param state the initial ExplorationState to be used when exploring the maze
      */
     public ExploreRunner(ExplorationState state) {
@@ -46,7 +47,7 @@ public class ExploreRunner {
      * resides upon the node where the orb is located.
      */
     public void findOrb() {
-        while(currentState.getDistanceToTarget() != 0) {
+        while (currentState.getDistanceToTarget() != 0) {
 
             //Update map with current location
             Long currentLocation = currentState.getCurrentLocation();
@@ -61,9 +62,11 @@ public class ExploreRunner {
             neighbours.forEach(notExplored::add);
 
             //Find path to unexplored tile that's nearest to orb
-            if(!neighbours.contains(rankedByDistance.peek())) {
+            if (!neighbours.contains(rankedByDistance.peek())) {
                 Stack<Long> path = PathBuilder.getPath(currentLocation, rankedByDistance.peek().getId(), map);
-                while(!path.empty()) currentState.moveTo(path.pop());
+                while (!path.empty()) {
+                    currentState.moveTo(path.pop());
+                }
             }
 
             currentState.moveTo(rankedByDistance.poll().getId());

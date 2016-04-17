@@ -8,7 +8,10 @@ import java.util.*;
 
 /**
  * This class uses Dijkstra's algorithm  to compute the shortest
- * path between two vertices given a map of the maze.
+ * path between two vertices given a map of the maze. It traverses
+ * the graph from start to destination, computing the length of the
+ * shortest route, and then back tracks to build the stack representing
+ * the path to be taken.
  */
 public class ShortestPathFinder {
 
@@ -24,10 +27,11 @@ public class ShortestPathFinder {
     private Stack<DijVertex> path;
 
     /**
-     * Builds the ShortestPastFinder object
+     * Builds the ShortestPathFinder object
+     *
      * @param state the current EscapeState of the sprite
      * @param start the starting vertex
-     * @param end the destination vertex
+     * @param end   the destination vertex
      */
     public ShortestPathFinder(EscapeState state, Node start, Node end) {
         this.state = state;
@@ -47,7 +51,7 @@ public class ShortestPathFinder {
         workingVertices = new HashMap<>();
         labelledVertices = new HashMap<>();
         Collection<Node> nodes = state.getVertices();
-        for(Node n : nodes) {
+        for (Node n : nodes) {
             graph.put(n.getId(), new DijVertex(n));
         }
     }
@@ -58,7 +62,7 @@ public class ShortestPathFinder {
     private void calculatePath() {
         DijVertex currentVertex = source;
         label(currentVertex);
-        while(currentVertex.getNode().getId() != destination.getNode().getId()) {
+        while (currentVertex.getNode().getId() != destination.getNode().getId()) {
             List<Long> neighbours = getNeighbours(currentVertex);
             assignWorkingValues(currentVertex, neighbours);
             currentVertex = smallestWorkingValue();
@@ -70,6 +74,7 @@ public class ShortestPathFinder {
 
     /**
      * Returns the distance of the shortest path computed by this object.
+     *
      * @return the distance of the shortest path
      */
     public int getDistance() {
@@ -78,6 +83,7 @@ public class ShortestPathFinder {
 
     /**
      * Returns the shortest path as a stack.
+     *
      * @return the shortest path between then start and end vertices
      */
     public Stack<DijVertex> getPath() {
@@ -86,10 +92,11 @@ public class ShortestPathFinder {
 
     /**
      * Labels a DijVertice's final value
+     *
      * @param v the vertex to be labelled
      */
     private void label(DijVertex v) {
-        if(v.getWorkingValue() == -1) {
+        if (v.getWorkingValue() == -1) {
             v.setFinalValue(0);
         } else {
             v.setFinalValue(v.getWorkingValue());
@@ -97,7 +104,7 @@ public class ShortestPathFinder {
         v.setOrder(currentOrder);
         currentOrder++;
         labelledVertices.put(v.getNode().getId(), v);
-        if(graph.containsKey(v.getNode().getId())) {
+        if (graph.containsKey(v.getNode().getId())) {
             graph.remove(v.getNode().getId());
         } else {
             workingVertices.remove(v.getNode().getId());
@@ -107,13 +114,14 @@ public class ShortestPathFinder {
 
     /**
      * Retrieves the neighbours of a DijVertex
+     *
      * @param v the DijVertex
      * @return the neighbours
      */
     private List<Long> getNeighbours(DijVertex v) {
         Set<Edge> edges = v.getNode().getExits();
         List<Long> neighbours = new ArrayList<>();
-        for(Edge e : edges) {
+        for (Edge e : edges) {
             neighbours.add(e.getOther(v.getNode()).getId());
         }
         return neighbours;
@@ -121,21 +129,22 @@ public class ShortestPathFinder {
 
     /**
      * Updates the workingValue fields of all neighbours of the DijVertex.
-     * @param v the DijVertex
+     *
+     * @param v          the DijVertex
      * @param neighbours the neighbours the vertex whose working values are to
      *                   be computed.
      */
     private void assignWorkingValues(DijVertex v, List<Long> neighbours) {
-        for(Long l : neighbours) {
+        for (Long l : neighbours) {
             DijVertex neighbour;
-            if(labelledVertices.containsKey(l)) {
+            if (labelledVertices.containsKey(l)) {
                 neighbour = labelledVertices.get(l);
-            } else if(workingVertices.containsKey(l)) {
+            } else if (workingVertices.containsKey(l)) {
                 neighbour = workingVertices.get(l);
             } else {
                 neighbour = graph.get(l);
             }
-            if(neighbour.getOrder() == -1) {
+            if (neighbour.getOrder() == -1) {
                 neighbour.setWorkingValue(v.getFinalValue() + v.getNode().getEdge(neighbour.getNode()).length());
                 workingVertices.put(l, neighbour);
                 graph.remove(l);
@@ -146,6 +155,7 @@ public class ShortestPathFinder {
 
     /**
      * Sorts the working values of all vertices computed and returns the smallest of these.
+     *
      * @return the DijVertex within the current graph with the smallest working value.
      */
     private DijVertex smallestWorkingValue() {
@@ -157,19 +167,20 @@ public class ShortestPathFinder {
     /**
      * Akin to the final stage of the shortest path algorithm, this method builds the path
      * stack from the destination to the current location.
+     *
      * @return the route to be taken
      */
     private Stack<DijVertex> traceRoute() {
         Stack<DijVertex> route = new Stack<>();
         route.push(destination);
         DijVertex temp = destination;
-        while(!temp.equals(source)) {
+        while (!temp.equals(source)) {
             List<Long> neighbours = getNeighbours(temp);
             List<DijVertex> vToStack = new ArrayList<>();
-            for(Long l : neighbours) {
-                if(labelledVertices.containsKey(l)) {
+            for (Long l : neighbours) {
+                if (labelledVertices.containsKey(l)) {
                     DijVertex newTemp = labelledVertices.get(l);
-                    if(newTemp.getFinalValue() + temp.getNode().getEdge(newTemp.getNode()).length() == temp.getFinalValue()) {
+                    if (newTemp.getFinalValue() + temp.getNode().getEdge(newTemp.getNode()).length() == temp.getFinalValue()) {
                         vToStack.add(newTemp);
                     }
                 }

@@ -11,13 +11,14 @@ import java.util.HashSet;
  */
 public class PathVertex {
 
-    private Long id;
     private final Collection<Long> neighbours;
+    private Long id;
     private int orderLabel, finalLabel, workingLabel;
 
     /**
      * Builds a PathVertex object using a GraphNode. Initialises all integer fields
      * to -1.
+     *
      * @param gn The GraphNode to be converted to a PathVertex.
      */
     public PathVertex(GraphNode gn) {
@@ -31,6 +32,7 @@ public class PathVertex {
 
     /**
      * Returns the label representing the ordering of this PathVertex
+     *
      * @return the ordering label
      */
     public int getOrderLabel() {
@@ -39,6 +41,7 @@ public class PathVertex {
 
     /**
      * Sets the orderLabel field.
+     *
      * @param orderLabel the new integer that this orderLabel will be set to
      */
     public void setOrderLabel(int orderLabel) {
@@ -47,6 +50,7 @@ public class PathVertex {
 
     /**
      * Returns the ID of this PathVertex.
+     *
      * @return the ID
      */
     public Long getId() {
@@ -55,6 +59,7 @@ public class PathVertex {
 
     /**
      * Returns the finalLabel field of this PathVertex.
+     *
      * @return the finalLabel
      */
     public int getFinalLabel() {
@@ -63,6 +68,7 @@ public class PathVertex {
 
     /**
      * Sets the finalLabel field
+     *
      * @param finalLabel the new integer that this finalLabel will be set to
      */
     public void setFinalLabel(int finalLabel) {
@@ -71,6 +77,7 @@ public class PathVertex {
 
     /**
      * Returns the workingLabel field of this PathVertex.
+     *
      * @return the workingLabel
      */
     public int getWorkingLabel() {
@@ -79,6 +86,7 @@ public class PathVertex {
 
     /**
      * Sets the workingLabel field
+     *
      * @param workingLabel the new integer that this workingLabel will be set to
      */
     public void setWorkingLabel(int workingLabel) {
@@ -87,6 +95,7 @@ public class PathVertex {
 
     /**
      * Returns the neighbours of this PathVertex
+     *
      * @return the neighbours
      */
     public Collection<Long> getNeighbours() {
