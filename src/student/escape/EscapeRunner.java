@@ -87,7 +87,7 @@ public class EscapeRunner {
      * than the remaining time limit.
      */
     private void updateGoldNodes() {
-        goldNodes = goldNodes.stream().filter(n ->
+        goldNodes = goldNodes.parallelStream().filter(n ->
                 n.getTile().getGold() > 0 && !outOfReach.containsKey(n.getId())).collect(Collectors.toList());
     }
 
